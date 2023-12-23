@@ -105,7 +105,7 @@ const CreateCourier: FC<any> = (props: any) => {
                                 </FormControl>
 
                                 <FormDescription>
-                                    Nama pengguna harus unik, hanya mengandung huruf dan angka.
+                                    Hanya mengandung huruf dan angka.
                                 </FormDescription>
 
                                 <FormMessage />
