@@ -3,13 +3,12 @@ import { DropdownMenu } from "@/Components/DropdownMenu";
 import { Header } from "@/Components/Header";
 import { Button } from "@/Components/ui/button";
 import { Layout } from "@/Layouts/Layout";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { IconDots, IconEdit, IconTrash } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC } from "react";
 
 const Couriers: FC<any> = (props: any) => {
-    console.log(props.couriers);
     const columns: ColumnDef<any>[] = [
         // {
         //     id: "select",
@@ -39,14 +38,14 @@ const Couriers: FC<any> = (props: any) => {
             accessorKey: "full_name",
             header: "Nama Lengkap",
             cell: ({ row }) => (
-                <div className="capitalize">{row.getValue("full_name")}</div>
+                <div className="capitalize whitespace-nowrap">{row.getValue("full_name")}</div>
             ),
         },
         {
             accessorKey: "created_at",
             header: "Bergabung Pada",
             cell: ({ row }) => (
-                <div className="capitalize">
+                <div className="capitalize whitespace-nowrap">
                     {new Date(row.getValue("created_at")).toLocaleString()}
                 </div>
             ),
@@ -54,44 +53,38 @@ const Couriers: FC<any> = (props: any) => {
         {
             id: "actions",
             enableHiding: false,
-            cell: ({ row }) => {
-                const payment = row.original;
-
-                return (
-                    <DropdownMenu
-                        trigger={
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="rounded-full"
-                            >
-                                <IconDots />
-                            </Button>
-                        }
-                        label="Aksi"
-                        items={[
-                            <Link
-                                key="edit"
-                                href={route("couriers.edit", payment.id)}
-                                className="flex items-center gap-2"
-                            >
-                                <IconEdit className="w-4 h-4" />
-                                <span>Edit</span>
-                            </Link>,
-                            <Link
-                                key="delete"
-                                href={route("couriers.destroy", payment.id)}
-                                method="delete"
-                                as="button"
-                                className="flex items-center gap-2"
-                            >
-                                <IconTrash className="w-4 h-4" />
-                                <span>Hapus</span>
-                            </Link>,
-                        ]}
-                    />
-                );
-            },
+            cell: ({ row }) => (
+                <DropdownMenu
+                    trigger={
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="rounded-full"
+                        >
+                            <IconDots />
+                        </Button>
+                    }
+                    label="Aksi"
+                    items={[
+                        {
+                            onClick: () =>
+                                router.get(
+                                    route("couriers.edit", row.original.id)
+                                ),
+                            icon: <IconEdit className="w-4 h-4" />,
+                            label: "Edit",
+                        },
+                        {
+                            onClick: () =>
+                                router.delete(
+                                    route("couriers.destroy", row.original.id)
+                                ),
+                            icon: <IconTrash className="w-4 h-4" />,
+                            label: "Hapus",
+                        },
+                    ]}
+                />
+            ),
         },
     ];
 

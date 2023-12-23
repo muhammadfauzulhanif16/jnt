@@ -12,18 +12,31 @@ export const Header = () => {
 
             <img src={Logo} alt="Logo" className="w-20 justify-self-center" />
 
-            <Link
-                as="div"
-                method="post"
-                href={route("logout")}
-                className="justify-self-end "
+            <Button
+                variant="outline"
+                className="rounded-full flex gap-2 hidden sm:flex justify-self-end"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    router.post(route("logout"));
+                }}
             >
-                <Button variant="outline" className="rounded-full flex gap-2">
-                    <IconLogout className="w-4 h-4" />
+                <IconLogout className="w-4 h-4" />
 
-                    <span className="hidden sm:inline">Keluar</span>
-                </Button>
-            </Link>
+                <span className="hidden sm:inline">Keluar</span>
+            </Button>
+
+            <Button
+                variant="outline"
+                className="rounded-full flex gap-2 sm:hidden justify-self-end"
+                size="icon"
+                onClick={(e) => {
+                    e.preventDefault();
+                    router.post(route("logout"));
+                }}
+            >
+                <IconLogout className="w-4 h-4" />
+            </Button>
         </header>
     );
 };

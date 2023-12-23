@@ -16,21 +16,31 @@ import { Button } from "@/Components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Logo from "../../../images/J&T_Express_logo.svg";
 import { router } from "@inertiajs/react";
-import {
-    Card,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/Components/ui/card";
+import { Card } from "@/Components/ui/card";
 
 const CreateCourier: FC<any> = (props: any) => {
     const formSchema = z.object({
         full_name: z.string().refine((val) => val.length > 0, {
             message: "Nama tidak boleh kosong",
         }),
-        username: z.string().refine((val) => val.length > 0, {
-            message: "Nama pengguna tidak boleh kosong",
-        }),
+        username: z
+            .string()
+            .refine((val) => val.length > 0, {
+                message: "Nama pengguna tidak boleh kosong",
+            })
+            .refine(
+                (val) => {
+                    const regexPattern = /^[a-zA-Z0-9]+$/;
+                    const isRegexMatch = regexPattern.test(val);
+                    const isUsernameExists = props.couriers.some(
+                        (courier: any) => courier.username === val
+                    );
+                    return isRegexMatch && !isUsernameExists;
+                },
+                {
+                    message: "Nama pengguna tidak sah atau sudah digunakan",
+                }
+            ),
         password: z.string().refine((val) => val.length > 0, {
             message: "Kata sandi tidak boleh kosong",
         }),
@@ -50,79 +60,82 @@ const CreateCourier: FC<any> = (props: any) => {
     }
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Layout
-                title={props.title}
-                isAuthenticated={props.auth.user}
-                description={props.description}
-                disabled={!form.formState.isValid}
-            >
-                <Form {...form}>
-                    <Card className="p-8 h-max w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="full_name"
-                            render={({ field }) => (
-                                <FormItem className="sm:col-span-2">
-                                    <FormLabel>Nama Lengkap</FormLabel>
+        <Layout
+            title={props.title}
+            isAuthenticated={props.auth.user}
+            description={props.description}
+            // disabled={!form.formState.isValid}
+            onSubmit={form.handleSubmit(onSubmit)}
+        >
+            <Form {...form}>
+                <Card className="p-8 h-max w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="full_name"
+                        render={({ field }) => (
+                            <FormItem className="sm:col-span-2">
+                                <FormLabel>Nama Lengkap</FormLabel>
 
-                                    <FormControl>
-                                        <Input
-                                            className="rounded-full"
-                                            placeholder="Masukkan nama lengkap"
-                                            {...field}
-                                        />
-                                    </FormControl>
+                                <FormControl>
+                                    <Input
+                                        className="rounded-full"
+                                        placeholder="Masukkan nama lengkap"
+                                        {...field}
+                                    />
+                                </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Nama Pengguna</FormLabel>
+                    <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Nama Pengguna</FormLabel>
 
-                                    <FormControl>
-                                        <Input
-                                            className="rounded-full"
-                                            placeholder="Masukkan nama pengguna"
-                                            {...field}
-                                        />
-                                    </FormControl>
+                                <FormControl>
+                                    <Input
+                                        className="rounded-full"
+                                        placeholder="Masukkan nama pengguna"
+                                        {...field}
+                                    />
+                                </FormControl>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                <FormDescription>
+                                    Nama pengguna harus unik, hanya mengandung huruf dan angka.
+                                </FormDescription>
 
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Kata Sandi</FormLabel>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                                    <FormControl>
-                                        <Input
-                                            type="password"
-                                            className="rounded-full"
-                                            placeholder="Masukkan kata sandi"
-                                            {...field}
-                                        />
-                                    </FormControl>
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Kata Sandi</FormLabel>
 
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </Card>
-                </Form>
-            </Layout>{" "}
-        </form>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        className="rounded-full"
+                                        placeholder="Masukkan kata sandi"
+                                        {...field}
+                                    />
+                                </FormControl>
+
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </Card>
+            </Form>
+        </Layout>
     );
 };
 

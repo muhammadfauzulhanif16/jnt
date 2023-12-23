@@ -31,7 +31,8 @@ class CourierController extends Controller
     {
         return Inertia::render("Couriers/Create", [
             'title' => 'Tambah Kurir',
-            'description' => 'Tambahkan kurir baru.',
+            'description' => 'Daftarkan kurir baru.',
+            'couriers' => User::where('role', 'courier')->select('username')->get(),
         ]);
     }
 
@@ -62,24 +63,36 @@ class CourierController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Courier $courier)
+    public function edit(User $courier)
     {
-        //
+        return Inertia::render("Couriers/Edit", [
+            'title' => 'Ubah Kurir',
+            'description' => 'Ubah kurir yang terdaftar.',
+            'courier' => $courier,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourierRequest $request, Courier $courier)
+    public function update(Request $request, User $courier)
     {
-        //
+        $courier->update([
+            'full_name' => $request->full_name,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return to_route('couriers.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Courier $courier)
+    public function destroy(User $courier)
     {
-        //
+        $courier->delete();
+
+        return to_route('couriers.index');
     }
 }

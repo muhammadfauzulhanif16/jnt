@@ -6,18 +6,21 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
+import { Link, router } from "@inertiajs/react";
 import { FC } from "react";
 
 interface DropdownMenuProps {
     trigger: any;
     label: string;
     items: any;
+    linkProps?: any;
 }
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({
     trigger,
     label,
     items,
+    linkProps,
 }: DropdownMenuProps) => {
     return (
         <ShadcnDropdownMenu>
@@ -29,7 +32,13 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 <DropdownMenuSeparator />
 
                 {items.map((item: any, id: number) => (
-                    <DropdownMenuItem key={id} className="rounded-full">{item}</DropdownMenuItem>
+                    <DropdownMenuItem
+                        key={id}
+                        className="rounded-full w-full cursor-pointer flex items-center gap-2"
+                        onClick={item.onClick}
+                    >
+                        {item.icon} {item.label}
+                    </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
         </ShadcnDropdownMenu>

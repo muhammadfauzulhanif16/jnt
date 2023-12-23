@@ -15,7 +15,9 @@ export const Sheet = () => {
                 </Button>
             </SheetTrigger>
 
-            <SheetContent side="left" className="p-8">asd</SheetContent>
+            <SheetContent side="left" className="p-8">
+                asd
+            </SheetContent>
         </ShadcnSheet>
     );
 };
