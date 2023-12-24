@@ -4,11 +4,19 @@ import { Button } from "./ui/button";
 import { DropdownMenu } from "./DropdownMenu";
 import { IconLogin, IconLogout, IconUser } from "@tabler/icons-react";
 import { Link, router } from "@inertiajs/react";
+import { NavigationBar } from "./NavigationBar";
+import { FC } from "react";
 
-export const Header = () => {
+interface HeaderProps {
+    title: string;
+}
+
+export const Header:FC<HeaderProps> = ({
+    title
+}:HeaderProps) => {
     return (
         <header className="border-b container py-4 grid grid-cols-3 items-center">
-            <Sheet />
+            <NavigationBar title={title} />
 
             <img src={Logo} alt="Logo" className="w-20 justify-self-center" />
 

@@ -7,23 +7,49 @@ import { IconDots, IconEdit, IconTrash } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC } from "react";
 
-const Couriers: FC<any> = (props: any) => {
+const Customers: FC<any> = (props: any) => {
     const columns: ColumnDef<any>[] = [
         {
-            accessorKey: "full_name",
+            accessorKey: "name",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Nama Lengkap</div>
+                <div className="capitalize whitespace-nowrap">Nama</div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {row.getValue("full_name")}
+                    {row.getValue("name")}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "address",
+            header: ({ table }) => (
+                <div className="capitalize whitespace-nowrap">Alamat</div>
+            ),
+            cell: ({ row }) => (
+                <div className="capitalize whitespace-nowrap">
+                    {row.getValue("address")}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "phone_number",
+            header: ({ table }) => (
+                <div className="capitalize whitespace-nowrap">
+                    Nomor Telepon
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="capitalize whitespace-nowrap">
+                    {row.getValue("phone_number")}
                 </div>
             ),
         },
         {
             accessorKey: "created_at",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Bergabung Pada</div>
+                <div className="capitalize whitespace-nowrap">
+                    Bergabung Pada
+                </div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
@@ -50,7 +76,7 @@ const Couriers: FC<any> = (props: any) => {
                         {
                             onClick: () =>
                                 router.get(
-                                    route("couriers.edit", row.original.id)
+                                    route("customers.edit", row.original.id)
                                 ),
                             icon: <IconEdit className="w-4 h-4" />,
                             label: "Ubah",
@@ -58,7 +84,7 @@ const Couriers: FC<any> = (props: any) => {
                         {
                             onClick: () =>
                                 router.delete(
-                                    route("couriers.destroy", row.original.id)
+                                    route("customers.destroy", row.original.id)
                                 ),
                             icon: <IconTrash className="w-4 h-4" />,
                             label: "Hapus",
@@ -74,18 +100,18 @@ const Couriers: FC<any> = (props: any) => {
             title={props.title}
             isAuthenticated={props.auth.user}
             description={props.description}
-            subPageHref="couriers.create"
+            subPageHref="customers.create"
         >
             <DataTable
-                data={props.couriers}
+                data={props.customers}
                 columns={columns}
                 search={{
-                    placeholder: "Cari kurir berdasarkan nama lengkap...",
-                    column: "full_name",
+                    placeholder: "Cari pelanggan berdasarkan nama...",
+                    column: "name",
                 }}
             />
         </Layout>
     );
 };
 
-export default Couriers;
+export default Customers;

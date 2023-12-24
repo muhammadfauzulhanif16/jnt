@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Courier;
-use App\Http\Requests\StoreCourierRequest;
-use App\Http\Requests\UpdateCourierRequest;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -12,6 +10,7 @@ use Illuminate\Support\Str;
 
 class CourierController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      */
@@ -80,7 +79,7 @@ class CourierController extends Controller
         $courier->update([
             'full_name' => $request->full_name,
             'username' => $request->username,
-            'password' => bcrypt($request->password),
+            'password' => $request->password ? bcrypt($request->password) : $courier->password,
         ]);
 
         return to_route('couriers.index');

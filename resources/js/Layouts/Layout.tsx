@@ -12,10 +12,11 @@ import {
 } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { IconCornerDownLeft, IconPlus } from "@tabler/icons-react";
+import { ScrollArea } from "@/Components/ui/scroll-area";
 
 interface LayoutProps {
     children: any;
-    title?: string;
+    title: string;
     description?: string;
     isAuthenticated: any;
     subPageHref?: string;
@@ -46,16 +47,37 @@ export const Layout: FC<LayoutProps> = ({
                 <link rel="ico" href="favicon.ico" />
             </Head>
 
-            {isAuthenticated && <Header />}
+            {isAuthenticated && <Header title={title} />}
 
             {isAuthenticated ? (
                 <form onSubmit={onSubmit} className="h-full">
                     <Card className="h-full border-none p-8 flex flex-col gap-8 rounded-none">
                         <CardHeader className="p-0 flex-row justify-between items-start">
                             <div>
-                                <CardTitle className="w-max mb-2">
-                                    {title}
+                                <CardTitle className="w-max">
+                                    {title.includes("Daftar") ? (
+                                        title
+                                    ) : (
+                                        <>
+                                            <span
+                                                className="underline cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    router.get(
+                                                        route(mainPageHref)
+                                                    );
+                                                }}
+                                            >
+                                                {title.split(" ")[1]}
+                                            </span>
+                                            {" / "}
+                                            <span className="text-base">
+                                                {title.split(" ")[0]}
+                                            </span>
+                                        </>
+                                    )}
                                 </CardTitle>
+
                                 <CardDescription className="w-max">
                                     {description}
                                 </CardDescription>
@@ -64,7 +86,7 @@ export const Layout: FC<LayoutProps> = ({
                             <Button
                                 type={subPageHref ? "button" : "submit"}
                                 disabled={disabled}
-                                className="w-max rounded-full hidden sm:flex"
+                                className="w-max rounded-full hidden sm:flex flex-none"
                                 onClick={() =>
                                     subPageHref &&
                                     router.get(route(subPageHref))
@@ -86,7 +108,7 @@ export const Layout: FC<LayoutProps> = ({
                             <Button
                                 type={subPageHref ? "button" : "submit"}
                                 disabled={disabled}
-                                className="rounded-full sm:hidden"
+                                className="rounded-full sm:hidden flex-none"
                                 size="icon"
                                 onClick={() =>
                                     subPageHref &&
@@ -101,7 +123,7 @@ export const Layout: FC<LayoutProps> = ({
                             </Button>
                         </CardHeader>
 
-                        <CardContent className="p-0 flex grow">
+                        <CardContent className="p-0 flex grow h-0">
                             {children}
                         </CardContent>
                     </Card>

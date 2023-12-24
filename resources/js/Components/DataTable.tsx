@@ -36,6 +36,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 // export const columns: ColumnDef<any>[] = [
 //     // {
@@ -164,7 +165,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 />
             </div>
 
-            <div className="rounded-[20px] border h-full">
+            <ScrollArea className="rounded-[20px] border h-full">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -210,35 +211,38 @@ export const DataTable: React.FC<DataTableProps> = ({
                                     colSpan={columns.length}
                                     className="text-center border-none"
                                 >
-                                    No results.
+                                    Tidak ada hasil.
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
-            </div>
+
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
 
             <div className="flex items-center justify-end space-x-2">
                 <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
+                    {table.getFilteredRowModel().rows.length} baris.
                 </div>
                 <div className="space-x-2">
                     <Button
+                        className="rounded-full"
                         variant="outline"
                         size="sm"
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        Sebelumnya
                     </Button>
                     <Button
+                        className="rounded-full"
                         variant="outline"
                         size="sm"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        Sesudahnya
                     </Button>
                 </div>
             </div>

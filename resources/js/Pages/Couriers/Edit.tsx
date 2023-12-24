@@ -11,23 +11,19 @@ import {
 } from "@/Components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/Components/ui/input";
-import { Button } from "@/Components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Logo from "../../../images/J&T_Express_logo.svg";
 import { router } from "@inertiajs/react";
 import { Card } from "@/Components/ui/card";
 
 const EditCourier: FC<any> = (props: any) => {
     const formSchema = z.object({
-        full_name: z.string().refine((val) => val.length > 0, {
-            message: "Nama tidak boleh kosong",
-        }),
-        username: z.string().refine((val) => val.length > 0, {
-            message: "Nama pengguna tidak boleh kosong",
-        }),
-        password: z.string().refine((val) => val.length > 0, {
-            message: "Kata sandi tidak boleh kosong",
-        }),
+        full_name: z
+            .string()
+            .nonempty({ message: "Nama lengkap harus diisi." }),
+        username: z
+            .string()
+            .nonempty({ message: "Nama pengguna harus diisi." }),
+        password: z.string().nonempty({ message: "Kata sandi harus diisi." }),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -44,15 +40,17 @@ const EditCourier: FC<any> = (props: any) => {
     }
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <Layout
-                title={props.title}
-                isAuthenticated={props.auth.user}
-                description={props.description}
-                disabled={!form.formState.isValid}
-            >
-                <Form {...form}>
-                    <Card className="p-8 h-max w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Layout
+            title={props.title}
+            isAuthenticated={props.auth.user}
+            description={props.description}
+            disabled={!form.formState.isValid}
+            onSubmit={form.handleSubmit(onSubmit)}
+            mainPageHref="couriers.index"
+        >
+            <Form {...form}>
+                <div className="flex flex-col w-full gap-4">
+                    <Card className="p-8 h-max w-full">
                         <FormField
                             control={form.control}
                             name="full_name"
@@ -72,7 +70,9 @@ const EditCourier: FC<any> = (props: any) => {
                                 </FormItem>
                             )}
                         />
+                    </Card>
 
+                    <Card className="p-8 h-max w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
                             name="username"
@@ -114,9 +114,9 @@ const EditCourier: FC<any> = (props: any) => {
                             )}
                         />
                     </Card>
-                </Form>
-            </Layout>{" "}
-        </form>
+                </div>
+            </Form>
+        </Layout>
     );
 };
 

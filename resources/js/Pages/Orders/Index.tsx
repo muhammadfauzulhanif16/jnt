@@ -1,29 +1,60 @@
 import { DataTable } from "@/Components/DataTable";
 import { DropdownMenu } from "@/Components/DropdownMenu";
+import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
 import { Layout } from "@/Layouts/Layout";
+import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
 import { IconDots, IconEdit, IconTrash } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC } from "react";
 
-const Couriers: FC<any> = (props: any) => {
+const Orders: FC<any> = (props: any) => {
     const columns: ColumnDef<any>[] = [
         {
-            accessorKey: "full_name",
+            accessorKey: "name",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Nama Lengkap</div>
+                <div className="capitalize whitespace-nowrap">Nama</div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {row.getValue("full_name")}
+                    {row.getValue("name")}
                 </div>
+            ),
+        },
+        {
+            accessorKey: "items_count",
+            header: ({ table }) => (
+                <div className="capitalize whitespace-nowrap">Total Barang</div>
+            ),
+            cell: ({ row }) => (
+                <div className="capitalize whitespace-nowrap">
+                    {row.getValue("items_count")}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "status",
+            header: ({ table }) => (
+                <div className="capitalize whitespace-nowrap">Status</div>
+            ),
+            cell: ({ row }: any) => (
+                <Badge
+                    className={cn(
+                        "capitalize whitespace-nowrap",
+                        row.getValue("status").includes("belum")
+                            ? "bg-red-500 hover:bg-red-500"
+                            : "bg-green-500 hover:bg-green-500"
+                    )}
+                >
+                    {row.getValue("status")}
+                </Badge>
             ),
         },
         {
             accessorKey: "created_at",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Bergabung Pada</div>
+                <div className="capitalize whitespace-nowrap">Dibuat Pada</div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
@@ -50,7 +81,7 @@ const Couriers: FC<any> = (props: any) => {
                         {
                             onClick: () =>
                                 router.get(
-                                    route("couriers.edit", row.original.id)
+                                    route("orders.edit", row.original.id)
                                 ),
                             icon: <IconEdit className="w-4 h-4" />,
                             label: "Ubah",
@@ -58,7 +89,7 @@ const Couriers: FC<any> = (props: any) => {
                         {
                             onClick: () =>
                                 router.delete(
-                                    route("couriers.destroy", row.original.id)
+                                    route("orders.destroy", row.original.id)
                                 ),
                             icon: <IconTrash className="w-4 h-4" />,
                             label: "Hapus",
@@ -74,18 +105,18 @@ const Couriers: FC<any> = (props: any) => {
             title={props.title}
             isAuthenticated={props.auth.user}
             description={props.description}
-            subPageHref="couriers.create"
+            subPageHref="orders.create"
         >
             <DataTable
-                data={props.couriers}
+                data={props.customers}
                 columns={columns}
                 search={{
-                    placeholder: "Cari kurir berdasarkan nama lengkap...",
-                    column: "full_name",
+                    placeholder: "Cari pesanan berdasarkan pelanggan...",
+                    column: "name",
                 }}
             />
         </Layout>
     );
 };
 
-export default Couriers;
+export default Orders;

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CourierController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +27,8 @@ Route::fallback(function () {
 Route::middleware('auth')->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::resource('couriers', CourierController::class);
+        Route::resource('customers', CustomerController::class);
+        Route::resource('orders', OrderController::class);
     });
 
 });

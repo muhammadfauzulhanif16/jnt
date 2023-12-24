@@ -5,18 +5,20 @@ import {
 } from "@/Components/ui/sheet";
 import { Button } from "./ui/button";
 import { IconMenu } from "@tabler/icons-react";
+import { FC } from "react";
 
-export const Sheet = () => {
+interface SheetProps {
+    trigger: any;
+    children: any;
+}
+
+export const Sheet: FC<SheetProps> = ({ trigger, children }: SheetProps) => {
     return (
         <ShadcnSheet>
-            <SheetTrigger asChild>
-                <Button size="icon" className="rounded-full" variant="ghost">
-                    <IconMenu className="w-4 h-4" />
-                </Button>
-            </SheetTrigger>
+            <SheetTrigger asChild>{trigger}</SheetTrigger>
 
-            <SheetContent side="left" className="p-8">
-                asd
+            <SheetContent side="left" className="p-8 justify-center flex flex-col">
+                {children}
             </SheetContent>
         </ShadcnSheet>
     );
