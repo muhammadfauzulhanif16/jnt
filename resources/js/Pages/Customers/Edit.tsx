@@ -33,7 +33,7 @@ const EditCustomer: FC<any> = (props: any) => {
             name: props.customer.name || "",
             phone_number: props.customer.phone_number || "",
             address: props.customer.address || "",
-            address_distance: props.customer.address_distance || "",
+            address_distance: props.customer.address_distance || 0,
             item_name: props.customer.item_name || "",
             item_type: props.customer.item_type || undefined,
         },
@@ -46,7 +46,7 @@ const EditCustomer: FC<any> = (props: any) => {
     return (
         <Layout
             title={props.title}
-            isAuthenticated={props.auth.user}
+            authenticated={props.auth.user}
             description={props.description}
             disabled={!form.formState.isValid}
             onSubmit={form.handleSubmit(onSubmit)}

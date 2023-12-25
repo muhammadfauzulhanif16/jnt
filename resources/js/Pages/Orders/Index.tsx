@@ -5,7 +5,12 @@ import { Button } from "@/Components/ui/button";
 import { Layout } from "@/Layouts/Layout";
 import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
-import { IconDots, IconEdit, IconTrash } from "@tabler/icons-react";
+import {
+    IconCalendar,
+    IconDots,
+    IconEdit,
+    IconTrash,
+} from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC } from "react";
 
@@ -81,7 +86,17 @@ const Orders: FC<any> = (props: any) => {
                         {
                             onClick: () =>
                                 router.get(
-                                    route("orders.edit", row.original.id)
+                                    route("orders.edit", row.original.order_id)
+                                ),
+                            icon: <IconCalendar className="w-4 h-4" />,
+                            label: "Jadwalkan",
+                            disabled:
+                                row.original.status === "belum siap dikirim",
+                        },
+                        {
+                            onClick: () =>
+                                router.get(
+                                    route("orders.edit", row.original.order_id)
                                 ),
                             icon: <IconEdit className="w-4 h-4" />,
                             label: "Ubah",
@@ -89,7 +104,10 @@ const Orders: FC<any> = (props: any) => {
                         {
                             onClick: () =>
                                 router.delete(
-                                    route("orders.destroy", row.original.id)
+                                    route(
+                                        "orders.destroy",
+                                        row.original.order_id
+                                    )
                                 ),
                             icon: <IconTrash className="w-4 h-4" />,
                             label: "Hapus",
@@ -103,7 +121,7 @@ const Orders: FC<any> = (props: any) => {
     return (
         <Layout
             title={props.title}
-            isAuthenticated={props.auth.user}
+            authenticated={props.auth.user}
             description={props.description}
             subPageHref="orders.create"
         >

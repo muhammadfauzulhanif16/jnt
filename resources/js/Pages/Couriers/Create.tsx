@@ -42,7 +42,7 @@ const CreateCourier: FC<any> = (props: any) => {
     return (
         <Layout
             title={props.title}
-            isAuthenticated={props.auth.user}
+            authenticated={props.auth.user}
             description={props.description}
             disabled={!form.formState.isValid}
             onSubmit={form.handleSubmit(onSubmit)}
@@ -63,6 +63,20 @@ const CreateCourier: FC<any> = (props: any) => {
                                             className="rounded-full"
                                             placeholder="Masukkan nama lengkap"
                                             {...field}
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    e.target.value
+                                                        .split(" ")
+                                                        .map(
+                                                            (word) =>
+                                                                word
+                                                                    .charAt(0)
+                                                                    .toUpperCase() +
+                                                                word.slice(1)
+                                                        )
+                                                        .join(" ")
+                                                )
+                                            }
                                         />
                                     </FormControl>
 

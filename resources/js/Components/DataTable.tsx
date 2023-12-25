@@ -242,7 +242,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Sesudahnya
+                        Selanjutnya
                     </Button>
                 </div>
             </div>

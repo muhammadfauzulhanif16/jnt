@@ -54,11 +54,9 @@ export const Combobox: FC<ComboboxProps> = ({
                         className="h-9 border-0 focus:ring-0"
                     />
 
-                    <CommandEmpty>
-                        Tidak ditemukan.
-                    </CommandEmpty>
+                    <CommandEmpty>Tidak ditemukan.</CommandEmpty>
 
-                    <CommandGroup>
+                    <CommandGroup >
                         {options.map((option) => (
                             <CommandItem
                                 {...commandItemProps}

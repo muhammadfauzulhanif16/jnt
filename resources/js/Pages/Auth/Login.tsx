@@ -40,7 +40,7 @@ const LogIn: FC<any> = (props: any) => {
     }
 
     return (
-        <Layout title={props.title} isAuthenticated={props.auth.user} >
+        <Layout title={props.title} authenticated={props.auth.user} >
             <img src={Logo} alt="Logo" className="w-40 mb-4" />
 
             <Form {...form}>

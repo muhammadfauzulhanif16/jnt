@@ -30,6 +30,7 @@ class OrderController extends Controller
                 ->get()
                 ->map(function ($customer) {
                     return [
+                        'order_id' => $customer->orders->first()->id,
                         'name' => $customer->name,
                         'items_count' => $customer->orders->sum('items_count'),
                         'status' => $customer->orders->first()->status,
@@ -97,15 +98,67 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        return inertia('Orders/Edit', [
+            'title' => 'Ubah Pesanan',
+            'description' => 'Ubah pesanan yang sudah terdaftar.',
+            'customers' => Customer::select('id', 'name')
+                ->whereHas('orders', function ($query) use ($order) {
+                    $query->where('id', $order->id)
+                        ->whereIn('status', ['siap dikirim', 'belum siap dikirim']);
+                })
+                ->orderBy('name')
+                ->get()
+                ->map(function ($customer) {
+                    return [
+                        'value' => $customer->id,
+                        'label' => $customer->name,
+                    ];
+                }),
+            'order' => $order,
+            'items' => $order->items->sortBy('receipt_number')->map(function ($item) {
+                return [
+                    'receipt_number' => $item->receipt_number,
+                ];
+            })->values()->toArray(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(Request $request, Order $order)
     {
-        //
+        $order->update([
+            'status' => $request->status,
+            'customer_id' => $request->customer_id,
+        ]);
+
+        $currentItemIds = $order->items()->pluck('id')->toArray();
+
+        // Create an array of 'id' values from $request->items, excluding any items that do not have an 'id'
+        $requestItemIds = array_filter(array_column($request->items, 'id'));
+
+        foreach ($request->items as $item) {
+            if (isset($item['id'])) {
+                // Update the existing item
+                Item::where('id', $item['id'])->update([
+                    'receipt_number' => $item['receipt_number'],
+                ]);
+            } else {
+                // Add a new item
+                Item::create([
+                    'id' => Str::uuid(),
+                    'receipt_number' => $item['receipt_number'],
+                    'order_id' => $order->id,
+                ]);
+            }
+        }
+
+        // Delete the removed items
+        $deletedItemIds = array_diff($currentItemIds, $requestItemIds);
+        Item::whereIn('id', $deletedItemIds)->delete();
+
+        return to_route('orders.index');
     }
 
     /**

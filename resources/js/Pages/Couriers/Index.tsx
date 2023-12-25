@@ -72,7 +72,7 @@ const Couriers: FC<any> = (props: any) => {
     return (
         <Layout
             title={props.title}
-            isAuthenticated={props.auth.user}
+            authenticated={props.auth.user}
             description={props.description}
             subPageHref="couriers.create"
         >

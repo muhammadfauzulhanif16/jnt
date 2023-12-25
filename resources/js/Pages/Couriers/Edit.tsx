@@ -17,13 +17,9 @@ import { Card } from "@/Components/ui/card";
 
 const EditCourier: FC<any> = (props: any) => {
     const formSchema = z.object({
-        full_name: z
-            .string()
-            .nonempty({ message: "Nama lengkap harus diisi." }),
-        username: z
-            .string()
-            .nonempty({ message: "Nama pengguna harus diisi." }),
-        password: z.string().nonempty({ message: "Kata sandi harus diisi." }),
+        full_name: z.string(),
+        username: z.string(),
+        password: z.string(),
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -42,7 +38,7 @@ const EditCourier: FC<any> = (props: any) => {
     return (
         <Layout
             title={props.title}
-            isAuthenticated={props.auth.user}
+            authenticated={props.auth.user}
             description={props.description}
             disabled={!form.formState.isValid}
             onSubmit={form.handleSubmit(onSubmit)}
@@ -63,6 +59,20 @@ const EditCourier: FC<any> = (props: any) => {
                                             className="rounded-full"
                                             placeholder="Masukkan nama lengkap"
                                             {...field}
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    e.target.value
+                                                        .split(" ")
+                                                        .map(
+                                                            (word) =>
+                                                                word
+                                                                    .charAt(0)
+                                                                    .toUpperCase() +
+                                                                word.slice(1)
+                                                        )
+                                                        .join(" ")
+                                                )
+                                            }
                                         />
                                     </FormControl>
 

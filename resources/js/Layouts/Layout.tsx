@@ -1,24 +1,22 @@
 import { Header } from "@/Components/Header";
 import { cn } from "@/lib/utils";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import { FC } from "react";
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { IconCornerDownLeft, IconPlus } from "@tabler/icons-react";
-import { ScrollArea } from "@/Components/ui/scroll-area";
 
 interface LayoutProps {
     children: any;
     title: string;
     description?: string;
-    isAuthenticated: any;
+    authenticated: any;
     subPageHref?: string;
     mainPageHref?: string;
     disabled?: boolean;
@@ -29,7 +27,7 @@ export const Layout: FC<LayoutProps> = ({
     children,
     title,
     description,
-    isAuthenticated,
+    authenticated,
     subPageHref = "",
     mainPageHref = "",
     disabled,
@@ -39,7 +37,7 @@ export const Layout: FC<LayoutProps> = ({
         <section
             className={cn(
                 "h-screen flex flex-col",
-                !isAuthenticated && "justify-center items-center px-8"
+                !authenticated && "justify-center items-center px-8"
             )}
         >
             <Head>
@@ -47,9 +45,11 @@ export const Layout: FC<LayoutProps> = ({
                 <link rel="ico" href="favicon.ico" />
             </Head>
 
-            {isAuthenticated && <Header title={title} />}
+            {authenticated && (
+                <Header title={title} authenticated={authenticated} />
+            )}
 
-            {isAuthenticated ? (
+            {authenticated ? (
                 <form onSubmit={onSubmit} className="h-full">
                     <Card className="h-full border-none p-8 flex flex-col gap-8 rounded-none">
                         <CardHeader className="p-0 flex-row justify-between items-start">

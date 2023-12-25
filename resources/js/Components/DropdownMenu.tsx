@@ -20,7 +20,6 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
     trigger,
     label,
     items,
-    linkProps,
 }: DropdownMenuProps) => {
     return (
         <ShadcnDropdownMenu>
@@ -33,6 +32,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
 
                 {items.map((item: any, id: number) => (
                     <DropdownMenuItem
+                        disabled={item.disabled}
                         key={id}
                         className="rounded-full w-full cursor-pointer flex items-center gap-2"
                         onClick={item.onClick}
