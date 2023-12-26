@@ -20,25 +20,20 @@ class OrderController extends Controller
         return inertia('Orders/Index', [
             'title' => 'Daftar Pesanan',
             'description' => 'Semua pesanan yang terdaftar.',
-            'customers' => Customer::with(['orders' => function ($query) {
-                $query->whereIn('status', ['siap dikirim', 'belum siap dikirim'])
-                    ->withCount('items');
-            }])
-                ->whereHas('orders', function ($query) {
-                    $query->whereIn('status', ['siap dikirim', 'belum siap dikirim']);
-                })
+            'orders' => Order::with(['customer', 'courier'])
+                ->whereIn('status', ['siap dikirim', 'belum siap dikirim'])
                 ->get()
-                ->map(function ($customer) {
+                ->map(function ($order) {
                     return [
-                        'order_id' => $customer->orders->first()->id,
-                        'customer_id' => $customer->id,
-                        'name' => $customer->name,
-                        'items_count' => $customer->orders->sum('items_count'),
-                        'status' => $customer->orders->first()->status,
-                        'created_at' => $customer->orders->first()->created_at,
-                        'updated_at'=> $customer->orders->first()->updated_at
+                        'order_id' => $order->id,
+                        'customer_id' => $order->customer->id,
+                        'customer_name' => $order->customer->name,
+                        'items_count' => $order->items->count(),
+                        'status' => $order->status,
+                        'created_at' => $order->created_at,
+                        'updated_at' => $order->updated_at,
                     ];
-                })
+                }),
         ]);
     }
 
@@ -97,7 +92,11 @@ class OrderController extends Controller
         return inertia('Orders/Show', [
             'title' => "Rincian Pesanan [$customer->name]",
             'description' => "Daftar barang yang tersedia [$customer->name].",
-            'items' => $order->items,
+            'items' => $order->items->sortBy('receipt_number')->map(function ($item) {
+                return [
+                    'receipt_number' => $item->receipt_number,
+                ];
+            })->values()->toArray(),
         ]);
     }
 
@@ -136,33 +135,46 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        $order->update([
-            'status' => $request->status,
-            'customer_id' => $request->customer_id,
-        ]);
+        if ($request->status !== $order->status) {
+            $order->update([
+                'status' => $request->status,
+                'updated_at' => now(),
+            ]);
 
-        $currentItemIds = $order->items()->pluck('id')->toArray();
-        $requestItemIds = array_filter(array_column($request->items, 'id'));
+            return to_route('schedule.index');
+        } else {
+            $order->update([
+                'status' => $request->status,
+                'customer_id' => $request->customer_id,
+            ]);
 
-        foreach ($request->items as $item) {
-            if (isset($item['id'])) {
-                Item::where('id', $item['id'])->update([
-                    'receipt_number' => $item['receipt_number'],
+            $currentItemIds = $order->items()->pluck('id')->toArray();
+            $requestItemIds = array_filter(array_column($request->items, 'id'));
+
+            foreach ($request->items as $item) {
+                if (isset($item['id'])) {
+                    Item::where('id', $item['id'])->update([
+                        'receipt_number' => $item['receipt_number'],
+                        'updated_at' => now(),
+                    ]);
+                } else {
+                    Item::create([
+                        'id' => Str::uuid(),
+                        'receipt_number' => $item['receipt_number'],
+                        'order_id' => $order->id,
+                    ]);
+                }
+
+                Order::where('id', $order->id)->update([
                     'updated_at' => now(),
                 ]);
-            } else {
-                Item::create([
-                    'id' => Str::uuid(),
-                    'receipt_number' => $item['receipt_number'],
-                    'order_id' => $order->id,
-                ]);
             }
+
+            $deletedItemIds = array_diff($currentItemIds, $requestItemIds);
+            Item::whereIn('id', $deletedItemIds)->delete();
+
+            return to_route('orders.index');
         }
-
-        $deletedItemIds = array_diff($currentItemIds, $requestItemIds);
-        Item::whereIn('id', $deletedItemIds)->delete();
-
-        return to_route('orders.index');
     }
 
     /**

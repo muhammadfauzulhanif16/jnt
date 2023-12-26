@@ -21,28 +21,36 @@ class ScheduleController extends Controller
         return Inertia::render("Schedule/Index", [
             'title' => 'Daftar Penjadwalan',
             'description' => 'Semua jadwal yang tersedia.',
-            'customers' => Customer::with(['orders' => function ($query) {
-                $query->whereIn('status', ['sudah dipickup', 'belum dipickup'])
-                    ->whereNotNull('scheduling_time')
-                    ->withCount('items')
-                    ->with('courier');
-            }])
-                ->whereHas('orders', function ($query) {
-                    $query->whereIn('status', ['sudah dipickup', 'belum dipickup'])
-                        ->whereNotNull('scheduling_time');
-                })
+            'order_has_not_been_picked_up' => Order::with(['customer', 'courier'])
+                ->where('status', 'belum dipickup')
+                ->whereNotNull('scheduling_time')
                 ->get()
-                ->map(function ($customer) {
+                ->map(function ($order) {
                     return [
-                        'order_id' => $customer->orders->first()->id,
-                        'customer_id' => $customer->id,
-                        'customer_name' => $customer->name,
-                        'items_count' => $customer->orders->sum('items_count'),
-                        'status' => $customer->orders->first()->status,
-                        'scheduling_time' => $customer->orders->first()->scheduling_time,
-                        'courier_name' => $customer->orders->first()->courier->full_name,
+                        'order_id' => $order->id,
+                        'customer_id' => $order->customer->id,
+                        'customer_name' => $order->customer->name,
+                        'items_count' => $order->items->count(),
+                        'status' => $order->status,
+                        'scheduling_time' => $order->scheduling_time,
+                        'courier_name' => $order->courier->full_name,
                     ];
-                })
+                }),
+            'order_has_been_picked_up' => Order::with(['customer', 'courier'])
+                ->where('status', 'sudah dipickup')
+                ->whereNotNull('scheduling_time')
+                ->get()
+                ->map(function ($order) {
+                    return [
+                        'order_id' => $order->id,
+                        'customer_id' => $order->customer->id,
+                        'customer_name' => $order->customer->name,
+                        'items_count' => $order->items->count(),
+                        'status' => $order->status,
+                        'scheduling_time' => $order->scheduling_time,
+                        'courier_name' => $order->courier->full_name,
+                    ];
+                }),
         ]);
     }
 
@@ -65,9 +73,9 @@ class ScheduleController extends Controller
         ]);
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  */
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         Order::find($request->order_id)->update([
@@ -79,13 +87,13 @@ class ScheduleController extends Controller
         return to_route('schedule.index');
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  */
-    // public function show(Courier $courier)
-    // {
-    //     //
-    // }
+    /**
+     * Display the specified resource.
+     */
+    public function show()
+    {
+        //
+    }
 
     // /**
     //  * Show the form for editing the specified resource.

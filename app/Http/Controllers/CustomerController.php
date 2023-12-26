@@ -18,7 +18,7 @@ class CustomerController extends Controller
         return inertia('Customers/Index', [
             'title' => 'Daftar Pelanggan',
             'description' => 'Semua pelanggan yang terdaftar.',
-            'customers' => Customer::orderBy('created_at', 'desc')->get(),
+            'customers' => Customer::withCount('orders')->orderBy('created_at', 'desc')->get(),
         ]);
     }
 
@@ -43,7 +43,7 @@ class CustomerController extends Controller
             'name' => $request->name,
             'phone_number' => $request->phone_number,
             'address' => $request->address,
-            'address_distance' => $request->address_distance,
+            'address_distance' => intval($request->address_distance),
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
         ]);

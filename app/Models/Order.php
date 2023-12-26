@@ -30,4 +30,9 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'courier_id');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

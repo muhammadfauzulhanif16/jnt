@@ -95,7 +95,7 @@ const Customers: FC<any> = (props: any) => {
         {
             id: "actions",
             enableHiding: false,
-            cell: ({ row }) => (
+            cell: ({ row }: any) => (
                 <DropdownMenu
                     trigger={
                         <Button
@@ -123,6 +123,7 @@ const Customers: FC<any> = (props: any) => {
                                 ),
                             icon: <IconTrash className="w-4 h-4" />,
                             label: "Hapus",
+                            disabled: !!row.original.orders_count,
                         },
                     ]}
                 />

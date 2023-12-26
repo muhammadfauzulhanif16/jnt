@@ -22,7 +22,7 @@ const CreateCustomer: FC<any> = (props: any) => {
         name: z.string(),
         phone_number: z.string(),
         address: z.string(),
-        address_distance: z.number(),
+        address_distance: z.string(),
         item_name: z.string(),
         item_type: z.enum(["barang", "dokumen"]),
     });
@@ -33,7 +33,7 @@ const CreateCustomer: FC<any> = (props: any) => {
             name: "",
             phone_number: "",
             address: "",
-            address_distance: 0,
+            address_distance: "",
             item_name: "",
             item_type: undefined,
         },
@@ -161,11 +161,6 @@ const CreateCustomer: FC<any> = (props: any) => {
                                             className="rounded-full"
                                             placeholder="Masukkan jarak alamat"
                                             {...field}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    parseInt(e.target.value)
-                                                )
-                                            }
                                         />
                                     </FormControl>
 

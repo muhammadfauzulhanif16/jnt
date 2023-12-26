@@ -40,7 +40,7 @@ const LogIn: FC<any> = (props: any) => {
     }
 
     return (
-        <Layout title={props.title} authenticated={props.auth.user} >
+        <Layout title={props.title} authenticated={props.auth.user}>
             <img src={Logo} alt="Logo" className="w-40 mb-4" />
 
             <Form {...form}>
@@ -77,6 +77,7 @@ const LogIn: FC<any> = (props: any) => {
 
                                 <FormControl>
                                     <Input
+                                        type="password"
                                         className="rounded-full"
                                         placeholder="Masukkan kata sandi"
                                         {...field}

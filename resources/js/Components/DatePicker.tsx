@@ -36,7 +36,7 @@ export const DatePicker: FC<DatePickerProps> = ({
                         !value && "text-muted-foreground"
                     )}
                 >
-                    {value ? format(value, "PPP") : <span>Pick a date</span>}
+                    {value ? format(value, "PPP") : <span>Pilih waktu</span>}
                 </Button>
             </PopoverTrigger>
 

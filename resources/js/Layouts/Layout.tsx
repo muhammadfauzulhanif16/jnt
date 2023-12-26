@@ -11,6 +11,7 @@ import {
 } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { IconCornerDownLeft, IconPlus } from "@tabler/icons-react";
+import { DatePicker } from "@/Components/DatePicker";
 
 interface LayoutProps {
     children: any;
@@ -84,7 +85,8 @@ export const Layout: FC<LayoutProps> = ({
                             </div>
 
                             {!title.includes("Rincian") &&
-                                !title.includes("Daftar Penjadwalan") && (
+                                !title.includes("Daftar Penjadwalan") &&
+                                authenticated.role === "admin" && (
                                     <>
                                         <Button
                                             type={
@@ -111,6 +113,7 @@ export const Layout: FC<LayoutProps> = ({
                                                     : "Tambah"}
                                             </span>
                                         </Button>
+
                                         <Button
                                             type={
                                                 subPageHref

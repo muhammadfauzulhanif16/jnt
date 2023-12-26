@@ -2,11 +2,22 @@ import { DataTable } from "@/Components/DataTable";
 import { DropdownMenu } from "@/Components/DropdownMenu";
 import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardContent,
+    CardFooter,
+} from "@/Components/ui/card";
+import { Input } from "@/Components/ui/input";
 import { Layout } from "@/Layouts/Layout";
 import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
+import { Label } from "@radix-ui/react-dropdown-menu";
 import {
     IconCalendar,
+    IconCheck,
     IconDots,
     IconEdit,
     IconEye,
@@ -14,13 +25,45 @@ import {
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 
 const Schedule: FC<any> = (props: any) => {
+    const items = (row: any) => {
+        let _items = [
+            {
+                onClick: () =>
+                    router.get(route("orders.show", row.original.order_id), {
+                        customer_id: row.original.customer_id,
+                    }),
+                icon: <IconEye className="w-4 h-4" />,
+                label: "Rincian Barang",
+            },
+        ];
+
+        if (
+            row.original.status === "belum dipickup" &&
+            props.auth.user.role === "courier"
+        ) {
+            _items.push({
+                onClick: () =>
+                    router.put(route("orders.update", row.original.order_id), {
+                        status: "sudah dipickup",
+                    }),
+                icon: <IconCheck className="w-4 h-4" />,
+                label: "Sudah Dipickup",
+            });
+        }
+
+        return _items;
+    };
+
     const columns: ColumnDef<any>[] = [
         {
             accessorKey: "customer_name",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Nama Pelanggan</div>
+                <div className="capitalize whitespace-nowrap">
+                    Nama Pelanggan
+                </div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
@@ -71,13 +114,13 @@ const Schedule: FC<any> = (props: any) => {
         {
             accessorKey: "scheduling_time",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">
-                   Waktu Pickup
-                </div>
+                <div className="capitalize whitespace-nowrap">Waktu Pickup</div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {new Date(row.getValue("scheduling_time")).toLocaleDateString()}
+                    {new Date(
+                        row.getValue("scheduling_time")
+                    ).toLocaleDateString()}
                 </div>
             ),
         },
@@ -96,34 +139,7 @@ const Schedule: FC<any> = (props: any) => {
                         </Button>
                     }
                     label="Aksi"
-                    items={[
-                        {
-                            onClick: () =>
-                                router.get(
-                                    route("orders.show", row.original.order_id),
-                                    {
-                                        customer_id: row.original.customer_id,
-                                    }
-                                ),
-                            icon: <IconEye className="w-4 h-4" />,
-                            label: "Rincian Barang",
-                        },
-                        // {
-                        //     onClick: () =>
-                        //         router.get(
-                        //             route("schedule.create", {
-                        //                 customer_id: row.original.customer_id,
-                        //             }),
-                        //             {
-                        //                 order_id: row.original.order_id,
-                        //             }
-                        //         ),
-                        //     icon: <IconCalendar className="w-4 h-4" />,
-                        //     label: "Jadwalkan",
-                        //     disabled:
-                        //         row.original.status === "belum siap dikirim",
-                        // },
-                    ]}
+                    items={items(row)}
                 />
             ),
         },
@@ -134,15 +150,51 @@ const Schedule: FC<any> = (props: any) => {
             title={props.title}
             authenticated={props.auth.user}
             description={props.description}
+            mainPageHref="schedule.show"
         >
-            <DataTable
-                data={props.customers}
-                columns={columns}
-                search={{
-                    placeholder: "Cari pesanan berdasarkan pelanggan...",
-                    column: "customer_name",
-                }}
-            />
+            <Tabs
+                defaultValue="belum dipickup"
+                className="w-full flex flex-col gap-2"
+            >
+                <TabsList className="grid w-full grid-cols-2 rounded-full">
+                    <TabsTrigger
+                        value="belum dipickup"
+                        className="rounded-full"
+                    >
+                        Belum Dipickup
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="sudah dipickup"
+                        className="rounded-full"
+                    >
+                        Sudah Dipickup
+                    </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="belum dipickup" className="grow h-0">
+                    <DataTable
+                        data={props.order_has_not_been_picked_up}
+                        columns={columns}
+                        search={{
+                            placeholder:
+                                "Cari pesanan berdasarkan pelanggan...",
+                            column: "customer_name",
+                        }}
+                    />
+                </TabsContent>
+
+                <TabsContent value="sudah dipickup" className="grow h-0">
+                    <DataTable
+                        data={props.order_has_been_picked_up}
+                        columns={columns}
+                        search={{
+                            placeholder:
+                                "Cari pesanan berdasarkan pelanggan...",
+                            column: "customer_name",
+                        }}
+                    />
+                </TabsContent>
+            </Tabs>
         </Layout>
     );
 };

@@ -38,74 +38,6 @@ import {
 } from "@/Components/ui/table";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
-// export const columns: ColumnDef<any>[] = [
-//     // {
-//     //     id: "select",
-//     //     header: ({ table }) => (
-//     //         <Checkbox
-//     //             checked={
-//     //                 table.getIsAllPageRowsSelected() ||
-//     //                 (table.getIsSomePageRowsSelected() && "indeterminate")
-//     //             }
-//     //             onCheckedChange={(value) =>
-//     //                 table.toggleAllPageRowsSelected(!!value)
-//     //             }
-//     //             aria-label="Select all"
-//     //         />
-//     //     ),
-//     //     cell: ({ row }) => (
-//     //         <Checkbox
-//     //             checked={row.getIsSelected()}
-//     //             onCheckedChange={(value) => row.toggleSelected(!!value)}
-//     //             aria-label="Select row"
-//     //         />
-//     //     ),
-//     //     enableSorting: false,
-//     //     enableHiding: false,
-//     // },
-//     {
-//         accessorKey: "status",
-//         header: "Status",
-//         cell: ({ row }) => (
-//             <div className="capitalize">{row.getValue("status")}</div>
-//         ),
-//     },
-//     {
-//         accessorKey: "email",
-//         header: ({ column }) => {
-//             return (
-//                 <Button
-//                     variant="ghost"
-//                     onClick={() =>
-//                         column.toggleSorting(column.getIsSorted() === "asc")
-//                     }
-//                 >
-//                     Email
-//                     {/* <CaretSortIcon className="ml-2 h-4 w-4" /> */}
-//                 </Button>
-//             );
-//         },
-//         cell: ({ row }) => (
-//             <div className="lowercase">{row.getValue("email")}</div>
-//         ),
-//     },
-//     {
-//         accessorKey: "amount",
-//         header: () => <div className="text-right">Amount</div>,
-//         cell: ({ row }) => {
-//             const amount = parseFloat(row.getValue("amount"));
-
-//             // Format the amount as a dollar amount
-//             const formatted = new Intl.NumberFormat("en-US", {
-//                 style: "currency",
-//                 currency: "USD",
-//             }).format(amount);
-
-//             return <div className="text-right font-medium">{formatted}</div>;
-//         },
-//     },
-// ];
-
 interface DataTableProps {
     data: any[];
     columns: ColumnDef<any>[];
@@ -147,7 +79,7 @@ export const DataTable: React.FC<DataTableProps> = ({
     });
 
     return (
-        <div className="w-full grow flex flex-col gap-4">
+        <div className="w-full h-full flex flex-col gap-4">
             <div className="flex items-center gap-4">
                 <Input
                     placeholder={search.placeholder}

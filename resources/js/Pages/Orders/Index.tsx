@@ -18,13 +18,13 @@ import { FC, useState } from "react";
 const Orders: FC<any> = (props: any) => {
     const columns: ColumnDef<any>[] = [
         {
-            accessorKey: "name",
+            accessorKey: "customer_name",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Nama</div>
+                <div className="capitalize whitespace-nowrap">Nama Pelanggan</div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {row.getValue("name")}
+                    {row.getValue("customer_name")}
                 </div>
             ),
         },
@@ -183,11 +183,11 @@ const Orders: FC<any> = (props: any) => {
             subPageHref="orders.create"
         >
             <DataTable
-                data={props.customers}
+                data={props.orders}
                 columns={columns}
                 search={{
                     placeholder: "Cari pesanan berdasarkan pelanggan...",
-                    column: "name",
+                    column: "customer_name",
                 }}
             />
         </Layout>

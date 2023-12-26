@@ -15,9 +15,7 @@ return new class extends Migration {
             $table->string('full_name')->nullable(false);
             $table->enum('role', ['admin', 'courier'])->nullable(false)->default('courier');
             $table->string('username')->unique()->nullable(false);
-            // $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(false);
-            $table->rememberToken();
             $table->timestamps();
         });
     }

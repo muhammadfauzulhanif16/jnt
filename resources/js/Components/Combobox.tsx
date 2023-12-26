@@ -54,36 +54,42 @@ export const Combobox: FC<ComboboxProps> = ({
                         className="h-9 border-0 focus:ring-0"
                     />
 
-                    <CommandEmpty>Tidak ditemukan.</CommandEmpty>
+                    {options.length > 0 && (
+                        <>
+                            <CommandEmpty>Tidak ditemukan.</CommandEmpty>
 
-                    <CommandGroup >
-                        {options.map((option) => (
-                            <CommandItem
-                                {...commandItemProps}
-                                className="rounded-full cursor-pointer"
-                                key={option.value}
-                                value={option.value}
-                                onSelect={(currentValue) => {
-                                    commandItemProps.onChange(
-                                        currentValue === commandItemProps.value
-                                            ? ""
-                                            : currentValue
-                                    );
-                                    setOpen(false);
-                                }}
-                            >
-                                {option.label}
-                                <IconCheck
-                                    className={cn(
-                                        "ml-auto h-4 w-4",
-                                        commandItemProps.value === option.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                    )}
-                                />
-                            </CommandItem>
-                        ))}
-                    </CommandGroup>
+                            <CommandGroup>
+                                {options.map((option) => (
+                                    <CommandItem
+                                        {...commandItemProps}
+                                        className="rounded-full cursor-pointer"
+                                        key={option.value}
+                                        value={option.value}
+                                        onSelect={(currentValue) => {
+                                            commandItemProps.onChange(
+                                                currentValue ===
+                                                    commandItemProps.value
+                                                    ? ""
+                                                    : currentValue
+                                            );
+                                            setOpen(false);
+                                        }}
+                                    >
+                                        {option.label}
+                                        <IconCheck
+                                            className={cn(
+                                                "ml-auto h-4 w-4",
+                                                commandItemProps.value ===
+                                                    option.value
+                                                    ? "opacity-100"
+                                                    : "opacity-0"
+                                            )}
+                                        />
+                                    </CommandItem>
+                                ))}
+                            </CommandGroup>
+                        </>
+                    )}
                 </Command>
             </PopoverContent>
         </Popover>
