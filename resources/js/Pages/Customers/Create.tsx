@@ -69,6 +69,20 @@ const CreateCustomer: FC<any> = (props: any) => {
                                             className="rounded-full"
                                             placeholder="Masukkan nama"
                                             {...field}
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    e.target.value
+                                                        .split(" ")
+                                                        .map(
+                                                            (word) =>
+                                                                word
+                                                                    .charAt(0)
+                                                                    .toUpperCase() +
+                                                                word.slice(1)
+                                                        )
+                                                        .join(" ")
+                                                )
+                                            }
                                         />
                                     </FormControl>
 
@@ -111,6 +125,20 @@ const CreateCustomer: FC<any> = (props: any) => {
                                             className="rounded-full"
                                             placeholder="Masukkan alamat"
                                             {...field}
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    e.target.value
+                                                        .split(" ")
+                                                        .map(
+                                                            (word) =>
+                                                                word
+                                                                    .charAt(0)
+                                                                    .toUpperCase() +
+                                                                word.slice(1)
+                                                        )
+                                                        .join(" ")
+                                                )
+                                            }
                                         />
                                     </FormControl>
 
@@ -158,6 +186,20 @@ const CreateCustomer: FC<any> = (props: any) => {
                                             className="rounded-full"
                                             placeholder="Masukkan nama barang"
                                             {...field}
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    e.target.value
+                                                        .split(" ")
+                                                        .map(
+                                                            (word) =>
+                                                                word
+                                                                    .charAt(0)
+                                                                    .toUpperCase() +
+                                                                word.slice(1)
+                                                        )
+                                                        .join(" ")
+                                                )
+                                            }
                                         />
                                     </FormControl>
 

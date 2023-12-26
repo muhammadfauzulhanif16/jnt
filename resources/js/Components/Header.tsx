@@ -19,7 +19,7 @@ export const Header: FC<HeaderProps> = ({
 }: HeaderProps) => {
     return (
         <header className="border-b container py-4 grid grid-cols-3 items-center">
-            <NavigationBar title={title} />
+            <NavigationBar title={title} authenticated={authenticated} />
 
             <img src={Logo} alt="Logo" className="w-20 justify-self-center" />
 

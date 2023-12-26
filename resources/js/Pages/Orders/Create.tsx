@@ -136,6 +136,11 @@ const CreateOrder: FC<any> = (props: any) => {
                                                         placeholder={`Masukkan nomor resi ${
                                                             index + 1
                                                         }`}
+                                                        onChange={(e) =>
+                                                            field.onChange(
+                                                                e.target.value.toUpperCase()
+                                                            )
+                                                        }
                                                     />
                                                 </FormControl>
 

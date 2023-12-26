@@ -9,10 +9,11 @@ import {
     IconCalendar,
     IconDots,
     IconEdit,
+    IconEye,
     IconTrash,
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { FC } from "react";
+import { FC, useState } from "react";
 
 const Orders: FC<any> = (props: any) => {
     const columns: ColumnDef<any>[] = [
@@ -63,58 +64,114 @@ const Orders: FC<any> = (props: any) => {
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {new Date(row.getValue("created_at")).toLocaleString()}
+                    {new Date(row.getValue("created_at")).toLocaleString(
+                        "id-ID",
+                        {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hour12: false,
+                        }
+                    )}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "updated_at",
+            header: ({ table }) => (
+                <div className="capitalize whitespace-nowrap">
+                    Diperbarui Pada
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="capitalize whitespace-nowrap">
+                    {new Date(row.getValue("updated_at")).toLocaleString(
+                        "id-ID",
+                        {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hour12: false,
+                        }
+                    )}
                 </div>
             ),
         },
         {
             id: "actions",
             enableHiding: false,
-            cell: ({ row }) => (
-                <DropdownMenu
-                    trigger={
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="rounded-full"
-                        >
-                            <IconDots />
-                        </Button>
-                    }
-                    label="Aksi"
-                    items={[
-                        {
-                            onClick: () =>
-                                router.get(
-                                    route("orders.edit", row.original.order_id)
-                                ),
-                            icon: <IconCalendar className="w-4 h-4" />,
-                            label: "Jadwalkan",
-                            disabled:
-                                row.original.status === "belum siap dikirim",
-                        },
-                        {
-                            onClick: () =>
-                                router.get(
-                                    route("orders.edit", row.original.order_id)
-                                ),
-                            icon: <IconEdit className="w-4 h-4" />,
-                            label: "Ubah",
-                        },
-                        {
-                            onClick: () =>
-                                router.delete(
-                                    route(
-                                        "orders.destroy",
-                                        row.original.order_id
-                                    )
-                                ),
-                            icon: <IconTrash className="w-4 h-4" />,
-                            label: "Hapus",
-                        },
-                    ]}
-                />
-            ),
+            cell: ({ row }) =>
+                props.auth.user.role === "admin" && (
+                    <DropdownMenu
+                        trigger={
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="rounded-full"
+                            >
+                                <IconDots />
+                            </Button>
+                        }
+                        label="Aksi"
+                        items={[
+                            {
+                                onClick: () =>
+                                    router.get(
+                                        route(
+                                            "orders.show",
+                                            row.original.order_id
+                                        ),
+                                        {
+                                            customer_id:
+                                                row.original.customer_id,
+                                        }
+                                    ),
+                                icon: <IconEye className="w-4 h-4" />,
+                                label: "Rincian Barang",
+                            },
+                            {
+                                onClick: () =>
+                                    router.get(route("schedule.create"), {
+                                        customer_id: row.original.customer_id,
+                                        order_id: row.original.order_id,
+                                    }),
+                                icon: <IconCalendar className="w-4 h-4" />,
+                                label: "Jadwalkan",
+                                disabled:
+                                    row.original.status ===
+                                    "belum siap dikirim",
+                            },
+                            {
+                                onClick: () =>
+                                    router.get(
+                                        route(
+                                            "orders.edit",
+                                            row.original.order_id
+                                        )
+                                    ),
+                                icon: <IconEdit className="w-4 h-4" />,
+                                label: "Ubah",
+                            },
+                            {
+                                onClick: () =>
+                                    router.delete(
+                                        route(
+                                            "orders.destroy",
+                                            row.original.order_id
+                                        )
+                                    ),
+                                icon: <IconTrash className="w-4 h-4" />,
+                                label: "Hapus",
+                            },
+                        ]}
+                    />
+                ),
         },
     ];
 

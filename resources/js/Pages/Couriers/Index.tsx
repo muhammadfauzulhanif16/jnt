@@ -23,11 +23,48 @@ const Couriers: FC<any> = (props: any) => {
         {
             accessorKey: "created_at",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Bergabung Pada</div>
+                <div className="capitalize whitespace-nowrap">
+                    Bergabung Pada
+                </div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {new Date(row.getValue("created_at")).toLocaleString()}
+                    {new Date(row.getValue("created_at")).toLocaleString(
+                        "id-ID",
+                        {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hour12: false,
+                        }
+                    )}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "updated_at",
+            header: ({ table }) => (
+                <div className="capitalize whitespace-nowrap">
+                    Diperbarui Pada
+                </div>
+            ),
+            cell: ({ row }) => (
+                <div className="capitalize whitespace-nowrap">
+                    {new Date(row.getValue("updated_at")).toLocaleString(
+                        "id-ID",
+                        {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hour12: false,
+                        }
+                    )}
                 </div>
             ),
         },

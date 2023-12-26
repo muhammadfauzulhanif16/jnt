@@ -83,6 +83,7 @@ class CustomerController extends Controller
             'address_distance' => $request->address_distance,
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
+            'updated_at' => now(),
         ]);
 
         return to_route('customers.index');
@@ -93,7 +94,6 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-
         $customer->delete();
 
         return to_route('customers.index');

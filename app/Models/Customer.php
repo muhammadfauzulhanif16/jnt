@@ -20,6 +20,7 @@ class Customer extends Model
         'address_distance',
         'item_name',
         'item_type',
+        'updated_at',
     ];
 
     public function orders()

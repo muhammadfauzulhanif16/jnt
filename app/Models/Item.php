@@ -16,6 +16,7 @@ class Item extends Model
         'id',
         'receipt_number',
         'order_id',
+        'updated_at'
     ];
 
     public function order()

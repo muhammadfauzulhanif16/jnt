@@ -80,6 +80,7 @@ class CourierController extends Controller
             'full_name' => $request->full_name,
             'username' => $request->username,
             'password' => $request->password ? bcrypt($request->password) : $courier->password,
+            'updated_at' => now(),
         ]);
 
         return to_route('couriers.index');

@@ -31,10 +31,12 @@ class OrderController extends Controller
                 ->map(function ($customer) {
                     return [
                         'order_id' => $customer->orders->first()->id,
+                        'customer_id' => $customer->id,
                         'name' => $customer->name,
                         'items_count' => $customer->orders->sum('items_count'),
                         'status' => $customer->orders->first()->status,
                         'created_at' => $customer->orders->first()->created_at,
+                        'updated_at'=> $customer->orders->first()->updated_at
                     ];
                 })
         ]);
@@ -88,9 +90,15 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(Request $request, Order $order)
     {
-        //
+        $customer = Customer::findOrFail($request->query('customer_id'));
+
+        return inertia('Orders/Show', [
+            'title' => "Rincian Pesanan [$customer->name]",
+            'description' => "Daftar barang yang tersedia [$customer->name].",
+            'items' => $order->items,
+        ]);
     }
 
     /**
@@ -134,18 +142,15 @@ class OrderController extends Controller
         ]);
 
         $currentItemIds = $order->items()->pluck('id')->toArray();
-
-        // Create an array of 'id' values from $request->items, excluding any items that do not have an 'id'
         $requestItemIds = array_filter(array_column($request->items, 'id'));
 
         foreach ($request->items as $item) {
             if (isset($item['id'])) {
-                // Update the existing item
                 Item::where('id', $item['id'])->update([
                     'receipt_number' => $item['receipt_number'],
+                    'updated_at' => now(),
                 ]);
             } else {
-                // Add a new item
                 Item::create([
                     'id' => Str::uuid(),
                     'receipt_number' => $item['receipt_number'],
@@ -154,7 +159,6 @@ class OrderController extends Controller
             }
         }
 
-        // Delete the removed items
         $deletedItemIds = array_diff($currentItemIds, $requestItemIds);
         Item::whereIn('id', $deletedItemIds)->delete();
 

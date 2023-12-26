@@ -6,12 +6,18 @@ import { router } from "@inertiajs/react";
 
 interface NavigationBarProps {
     title: string;
+    authenticated: any;
 }
 
 export const NavigationBar: FC<NavigationBarProps> = ({
     title,
+    authenticated,
 }: NavigationBarProps) => {
-    const navigations = [
+    let navigations = [
+        {
+            label: "Penjadwalan",
+            href: "schedule.index",
+        },
         {
             label: "Pesanan",
             href: "orders.index",
@@ -25,6 +31,12 @@ export const NavigationBar: FC<NavigationBarProps> = ({
             href: "couriers.index",
         },
     ];
+
+    if (authenticated.role === "courier") {
+        navigations = navigations.filter(
+            (item) => item.label === "Penjadwalan" || item.label === "Pesanan"
+        );
+    }
 
     return (
         <Sheet
