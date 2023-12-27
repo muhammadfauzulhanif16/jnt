@@ -17,6 +17,8 @@ class Customer extends Model
         'name',
         'phone_number',
         'address',
+        'latitude',
+        'longitude',
         'address_distance',
         'item_name',
         'item_type',

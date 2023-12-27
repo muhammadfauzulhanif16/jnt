@@ -19,5 +19,5 @@
         "resources/js/**/*.ts",
         "resources/js/**/*.tsx",
         "resources/js/**/*.d.ts"
-    ]
+, "resources/js/Components/HereMap.jsx"    ]
 }

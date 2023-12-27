@@ -111,6 +111,14 @@ const Customers: FC<any> = (props: any) => {
                         {
                             onClick: () =>
                                 router.get(
+                                    route("customers.show", row.original.id)
+                                ),
+                            icon: <IconEdit className="w-4 h-4" />,
+                            label: "Lihat Rute",
+                        },
+                        {
+                            onClick: () =>
+                                router.get(
                                     route("customers.edit", row.original.id)
                                 ),
                             icon: <IconEdit className="w-4 h-4" />,

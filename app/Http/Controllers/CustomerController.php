@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -38,15 +39,41 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
+        $apiKey = 'BbG8X_tjET0wFsIEolIqKMZv3j6JstldWLq38ssr0_M';
+        $client = new Client();
+        $url = 'https://geocode.search.hereapi.com/v1/geocode';
+        $response = $client->request('GET', $url, [
+            'query' => [
+                'apiKey' => $apiKey,
+                'q' => $request->address,
+            ],
+        ]);
+
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        // $request->merge([
+        //     'address_latitude' => $response['items'][0]['position']['lat'],
+        //     'address_longitude' => $response['items'][0]['position']['lng'],
+        // ]);
+
         Customer::create([
             'id' => Str::uuid(),
             'name' => $request->name,
             'phone_number' => $request->phone_number,
             'address' => $request->address,
+            'latitude' => $data['items'][0]['position']['lat'],
+            'longitude' => $data['items'][0]['position']['lng'],
             'address_distance' => intval($request->address_distance),
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
         ]);
+
+        // try {
+
+
+
+        // } catch (\Exception $e) {
+        // }
 
         return to_route('customers.index');
     }
@@ -56,7 +83,11 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return inertia('Customers/Show', [
+            'title' => 'Rincian Pelanggan',
+            'description' => 'Detail pelanggan yang terdaftar.',
+            'customer' => $customer,
+        ]);
     }
 
     /**
