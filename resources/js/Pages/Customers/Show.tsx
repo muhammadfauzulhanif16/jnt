@@ -1,6 +1,9 @@
 import { HereMap } from "@/Components/HereMap";
 import { Layout } from "@/Layouts/Layout";
-import { FC, useState, useEffect } from "react";
+// import { FC, useState, useEffect } from "react";
+import H from "@here/maps-api-for-javascript";
+
+console.log(H)
 
 const ShowCustomer: FC<any> = (props: any) => {
     const apikey = "KMu8u57MuHAETwEykqn5iENZh8mpYVIsjd9UivmY1E8"; // Ganti dengan kunci API HERE Maps Anda
@@ -14,11 +17,12 @@ const ShowCustomer: FC<any> = (props: any) => {
             description={props.description}
             mainPageHref="customers.index"
         >
-            <HereMap
+            asd
+            {/* <HereMap
                 apikey={apikey}
                 initialLocation={initialLocation}
                 destinationLocation={destinationLocation}
-            />
+            /> */}
         </Layout>
     );
 };
