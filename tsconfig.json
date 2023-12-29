@@ -11,13 +11,20 @@
         "forceConsistentCasingInFileNames": true,
         "noEmit": true,
         "paths": {
-            "@/*": ["./resources/js/*"],
-            "ziggy-js": ["./vendor/tightenco/ziggy"]
+            "@/*": [
+                "./resources/js/*"
+            ],
+            "ziggy-js": [
+                "./vendor/tightenco/ziggy"
+            ]
         }
     },
     "include": [
         "resources/js/**/*.ts",
         "resources/js/**/*.tsx",
-        "resources/js/**/*.d.ts"
-, "resources/js/Components/HereMap.jsx"    ]
+        "resources/js/**/*.d.ts",
+        "resources/js/Components/HereMap.jsx",
+        "resources/js/Components/LeafletGeocoder.jsx",
+        "resources/js/Pages/Customers/Show.tsx"
+    ]
 }

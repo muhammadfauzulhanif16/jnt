@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
@@ -39,7 +38,7 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        $apiKey = 'BbG8X_tjET0wFsIEolIqKMZv3j6JstldWLq38ssr0_M';
+        $apiKey = 's-zaYHY2QTdLh2sT0ilfQCcFq9oiXf0z0izpqlqWOoQ';
         $client = new Client();
         $url = 'https://geocode.search.hereapi.com/v1/geocode';
         $response = $client->request('GET', $url, [

@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->string('name')->nullable(false);
             $table->string('phone_number')->nullable(false)->unique();
             $table->text('address')->nullable(false);
-            $table->double('latitude', 10, 6)->nullable(false);
-            $table->double('longitude', 10, 6)->nullable(false);
+            $table->double('latitude')->nullable(false);
+            $table->double('longitude')->nullable(false);
             $table->unsignedInteger('address_distance')->nullable(false);
             $table->string('item_name')->nullable(false);
             $table->enum('item_type', ['barang', 'dokumen'])->nullable(false);

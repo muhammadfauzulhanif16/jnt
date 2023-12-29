@@ -1,5 +1,13 @@
 import './bootstrap';
 import '../css/app.css';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+
+
+
+
+
 
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
