@@ -21,13 +21,13 @@ const Customers: FC<any> = (props: any) => {
             ),
         },
         {
-            accessorKey: "address",
+            accessorKey: "full_address_destination",
             header: ({ table }) => (
                 <div className="capitalize whitespace-nowrap">Alamat</div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {row.getValue("address")}
+                    {row.getValue("full_address_destination")}
                 </div>
             ),
         },

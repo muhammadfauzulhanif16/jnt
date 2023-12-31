@@ -16,6 +16,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { FC, useState } from "react";
 
 const Orders: FC<any> = (props: any) => {
+    console.log(props.orders);
     const columns: ColumnDef<any>[] = [
         {
             accessorKey: "customer_name",

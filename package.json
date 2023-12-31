@@ -26,6 +26,7 @@
     "dependencies": {
         "@here/maps-api-for-javascript": "^1.49.1",
         "@hookform/resolvers": "^3.3.3",
+        "@radix-ui/react-aspect-ratio": "^1.0.3",
         "@radix-ui/react-avatar": "^1.0.4",
         "@radix-ui/react-dialog": "^1.0.5",
         "@radix-ui/react-dropdown-menu": "^2.0.6",

@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use GuzzleHttp\Client;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
@@ -36,43 +37,22 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCustomerRequest $request)
+    public function store(Request $request)
     {
-        $apiKey = 's-zaYHY2QTdLh2sT0ilfQCcFq9oiXf0z0izpqlqWOoQ';
-        $client = new Client();
-        $url = 'https://geocode.search.hereapi.com/v1/geocode';
-        $response = $client->request('GET', $url, [
-            'query' => [
-                'apiKey' => $apiKey,
-                'q' => $request->address,
-            ],
-        ]);
-
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        // $request->merge([
-        //     'address_latitude' => $response['items'][0]['position']['lat'],
-        //     'address_longitude' => $response['items'][0]['position']['lng'],
-        // ]);
-
         Customer::create([
             'id' => Str::uuid(),
             'name' => $request->name,
             'phone_number' => $request->phone_number,
-            'address' => $request->address,
-            'latitude' => $data['items'][0]['position']['lat'],
-            'longitude' => $data['items'][0]['position']['lng'],
-            'address_distance' => intval($request->address_distance),
+            'full_address_destination' => $request->full_address_destination,
+            'start_lat' => $request->start_lat,
+            'start_long' => $request->start_long,
+            'dest_lat' => $request->dest_lat,
+            'dest_long' => $request->dest_long,
+            'dest_total_distance' => $request->dest_total_distance,
+            'dest_total_time' => $request->dest_total_time,
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
         ]);
-
-        // try {
-
-
-
-        // } catch (\Exception $e) {
-        // }
 
         return to_route('customers.index');
     }
@@ -104,13 +84,18 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCustomerRequest $request, Customer $customer)
+    public function update(Request $request, Customer $customer)
     {
         $customer->update([
             'name' => $request->name,
             'phone_number' => $request->phone_number,
-            'address' => $request->address,
-            'address_distance' => $request->address_distance,
+            'full_address_destination' => $request->full_address_destination,
+            'start_lat' => $request->start_lat,
+            'start_long' => $request->start_long,
+            'dest_lat' => $request->dest_lat,
+            'dest_long' => $request->dest_long,
+            'dest_total_distance' => $request->dest_total_distance,
+            'dest_total_time' => $request->dest_total_time,
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
             'updated_at' => now(),

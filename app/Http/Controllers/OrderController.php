@@ -22,7 +22,7 @@ class OrderController extends Controller
             'description' => 'Semua pesanan yang terdaftar.',
             'orders' => Order::with(['customer', 'courier'])
                 ->whereIn('status', ['siap dikirim', 'belum siap dikirim'])
-                ->get()
+                ->orderBy('customers.dest_total_distance', 'asc')->get()
                 ->map(function ($order) {
                     return [
                         'order_id' => $order->id,

@@ -14,10 +14,13 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->string('name')->nullable(false);
             $table->string('phone_number')->nullable(false)->unique();
-            $table->text('address')->nullable(false);
-            $table->double('latitude')->nullable(false);
-            $table->double('longitude')->nullable(false);
-            $table->unsignedInteger('address_distance')->nullable(false);
+            $table->text('full_address_destination')->nullable(false);
+            $table->double('start_lat')->nullable(false);
+            $table->double('start_long')->nullable(false);
+            $table->double('dest_lat')->nullable(false);
+            $table->double('dest_long')->nullable(false);
+            $table->string('dest_total_distance')->nullable(false);
+            $table->string('dest_total_time')->nullable(false);
             $table->string('item_name')->nullable(false);
             $table->enum('item_type', ['barang', 'dokumen'])->nullable(false);
             $table->timestamps();
