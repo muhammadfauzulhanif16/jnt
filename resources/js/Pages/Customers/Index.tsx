@@ -3,7 +3,7 @@ import { DropdownMenu } from "@/Components/DropdownMenu";
 import { Button } from "@/Components/ui/button";
 import { Layout } from "@/Layouts/Layout";
 import { router } from "@inertiajs/react";
-import { IconDots, IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconDots, IconEdit, IconMap, IconTrash } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC } from "react";
 
@@ -113,7 +113,7 @@ const Customers: FC<any> = (props: any) => {
                                 router.get(
                                     route("customers.show", row.original.id)
                                 ),
-                            icon: <IconEdit className="w-4 h-4" />,
+                            icon: <IconMap className="w-4 h-4" />,
                             label: "Lihat Rute",
                         },
                         {

@@ -18,13 +18,17 @@ import {
 } from "@/Components/ui/select";
 
 interface DatePickerProps {
-    value: any;
-    onSelect: any;
+    time: any;
+    onTimeChange: any;
+    date: any;
+    onDateChange: any;
 }
 
 export const DatePicker: FC<DatePickerProps> = ({
-    value,
-    onSelect,
+    time,
+    onTimeChange,
+    date,
+    onDateChange,
 }: DatePickerProps) => {
     return (
         <Popover>
@@ -33,10 +37,23 @@ export const DatePicker: FC<DatePickerProps> = ({
                     variant={"outline"}
                     className={cn(
                         "w-full rounded-full justify-start text-left font-normal",
-                        !value && "text-muted-foreground"
+                        !date && "text-muted-foreground"
                     )}
                 >
-                    {value ? format(value, "PPP") : <span>Pilih waktu</span>}
+                    {date ? (
+                        time ? (
+                            format(
+                                new Date(
+                                    `${format(date, "yyyy-MM-dd")}T${time}`
+                                ),
+                                "PPP, HH:mm"
+                            )
+                        ) : (
+                            format(date, "PPP")
+                        )
+                    ) : (
+                        <span>Pilih waktu</span>
+                    )}
                 </Button>
             </PopoverTrigger>
 
@@ -45,8 +62,8 @@ export const DatePicker: FC<DatePickerProps> = ({
                 className="rounded-[20px] flex w-auto flex-col space-y-2 p-2"
             >
                 <Select
-                    onValueChange={(value) =>
-                        onSelect(addDays(new Date(), parseInt(value)))
+                    onValueChange={(date) =>
+                        onDateChange(addDays(new Date(), parseInt(date)))
                     }
                 >
                     <SelectTrigger className="rounded-full">
@@ -72,10 +89,17 @@ export const DatePicker: FC<DatePickerProps> = ({
                 <div className="rounded-[20px] border">
                     <Calendar
                         mode="single"
-                        selected={value}
-                        onSelect={onSelect}
+                        selected={date}
+                        onSelect={onDateChange}
                     />
                 </div>
+
+                <input
+                    type="time"
+                    className="rounded-full w-full border"
+                    value={time}
+                    onChange={onTimeChange}
+                />
             </PopoverContent>
         </Popover>
     );

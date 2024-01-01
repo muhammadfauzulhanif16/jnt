@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Layout } from "@/Layouts/Layout";
 import * as z from "zod";
 import {
@@ -19,8 +19,19 @@ import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Button } from "@/Components/ui/button";
 import { IconTrash } from "@tabler/icons-react";
 import { DatePicker } from "@/Components/DatePicker";
+import { format } from "date-fns";
 
 const CreateSchedule: FC<any> = (props: any) => {
+    const [date, setDate] = useState("");
+    const [time, setTime] = useState("");
+
+    const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTime(event.target.value);
+    };
+    const handleDateChange = (value: any) => {
+        setDate(value);
+    };
+
     const formSchema = z.object({
         order_id: z.string(),
         courier_id: z.string(),
@@ -37,7 +48,10 @@ const CreateSchedule: FC<any> = (props: any) => {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        router.post(route("schedule.store"), values);
+        router.post(route("schedule.store"), {
+            ...values,
+            scheduling_time: `${format(date, "yyyy/MM/dd")}, ${time}`
+        });
     }
 
     return (
@@ -53,28 +67,20 @@ const CreateSchedule: FC<any> = (props: any) => {
                 <Form {...form}>
                     <div className="flex flex-col gap-4">
                         <Card className="p-8 h-max w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <FormField
-                                control={form.control}
-                                name="scheduling_time"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Waktu</FormLabel>
+                            <FormItem>
+                                <FormLabel>Waktu</FormLabel>
 
-                                        <FormControl>
-                                            <DatePicker
-                                                value={field.value}
-                                                onSelect={(value: any) => {
-                                                    field.onChange(
-                                                        value.toISOString()
-                                                    );
-                                                }}
-                                            />
-                                        </FormControl>
+                                <FormControl>
+                                    <DatePicker
+                                        time={time}
+                                        onTimeChange={handleTimeChange}
+                                        date={date}
+                                        onDateChange={handleDateChange}
+                                    />
+                                </FormControl>
 
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                <FormMessage />
+                            </FormItem>
 
                             <FormField
                                 control={form.control}

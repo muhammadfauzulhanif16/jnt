@@ -59,11 +59,12 @@ class ScheduleController extends Controller
      */
     public function create(Request $request)
     {
-        $order_id = $request->query('order_id');
+        $order = Order::find($request->input('order_id'));
+        $customerName = $order->customer->name;
         return Inertia::render("Schedule/Create", [
             'title' => 'Tambah Penjadwalan',
-            'description' => "Daftarkan jadwal baru [$order_id].",
-            'order_id' => $order_id,
+            'description' => "Daftarkan jadwal baru untuk [$customerName].",
+            'order_id' => $order->id,
             'couriers' => User::where('role', 'courier')->get()->map(function ($courier) {
                 return [
                     'value' => $courier->id,

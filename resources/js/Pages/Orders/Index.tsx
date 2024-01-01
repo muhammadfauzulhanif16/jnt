@@ -10,18 +10,21 @@ import {
     IconDots,
     IconEdit,
     IconEye,
+    IconMap,
+    IconPackage,
     IconTrash,
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC, useState } from "react";
 
 const Orders: FC<any> = (props: any) => {
-    console.log(props.orders);
     const columns: ColumnDef<any>[] = [
         {
             accessorKey: "customer_name",
             header: ({ table }) => (
-                <div className="capitalize whitespace-nowrap">Nama Pelanggan</div>
+                <div className="capitalize whitespace-nowrap">
+                    Nama Pelanggan
+                </div>
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
@@ -125,15 +128,28 @@ const Orders: FC<any> = (props: any) => {
                                 onClick: () =>
                                     router.get(
                                         route(
+                                            "customers.show",
+                                            row.original.customer_id
+                                        ),
+                                    
+                                    ),
+                                icon: <IconMap className="w-4 h-4" />,
+                                label: "Lihat Rute",
+                            },
+                            {
+                                onClick: () =>
+                                    router.get(
+                                        route(
                                             "orders.show",
                                             row.original.order_id
                                         ),
                                         {
                                             customer_id:
                                                 row.original.customer_id,
+                                       
                                         }
                                     ),
-                                icon: <IconEye className="w-4 h-4" />,
+                                icon: <IconPackage className="w-4 h-4" />,
                                 label: "Rincian Barang",
                             },
                             {

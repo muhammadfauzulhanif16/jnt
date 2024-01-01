@@ -21,6 +21,8 @@ import {
     IconDots,
     IconEdit,
     IconEye,
+    IconMap,
+    IconPackage,
     IconTrash,
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -32,10 +34,18 @@ const Schedule: FC<any> = (props: any) => {
         let _items = [
             {
                 onClick: () =>
+                    router.get(
+                        route("customers.show", row.original.customer_id)
+                    ),
+                icon: <IconMap className="w-4 h-4" />,
+                label: "Lihat Rute",
+            },
+            {
+                onClick: () =>
                     router.get(route("orders.show", row.original.order_id), {
                         customer_id: row.original.customer_id,
                     }),
-                icon: <IconEye className="w-4 h-4" />,
+                icon: <IconPackage className="w-4 h-4" />,
                 label: "Rincian Barang",
             },
         ];
@@ -118,9 +128,7 @@ const Schedule: FC<any> = (props: any) => {
             ),
             cell: ({ row }) => (
                 <div className="capitalize whitespace-nowrap">
-                    {new Date(
-                        row.getValue("scheduling_time")
-                    ).toLocaleDateString()}
+                    {row.getValue("scheduling_time")}
                 </div>
             ),
         },

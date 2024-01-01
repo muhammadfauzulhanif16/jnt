@@ -30,9 +30,6 @@ export const Map: FC<MapProps> = ({
     const map = useMap();
     const routingControl = useRef<any>(null);
 
-    console.log(startingPointAddress);
-    console.log(destinationAddress);
-
     useEffect(() => {
         function convertDistance(distance: any) {
             const kilometers = Math.floor(distance / 1000);

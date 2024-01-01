@@ -10,8 +10,8 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
-import { IconCornerDownLeft, IconPlus } from "@tabler/icons-react";
-import { DatePicker } from "@/Components/DatePicker";
+import { IconCornerDownLeft, IconPlus, IconPrinter } from "@tabler/icons-react";
+import Logo from "../../images/J&T_Express_logo.svg";
 
 interface LayoutProps {
     children: any;
@@ -43,7 +43,7 @@ export const Layout: FC<LayoutProps> = ({
         >
             <Head>
                 <title>{title}</title>
-                <link rel="ico" href="favicon.ico" />
+                <link rel="ico" href={Logo} />
             </Head>
 
             {authenticated && (
@@ -84,58 +84,98 @@ export const Layout: FC<LayoutProps> = ({
                                 </CardDescription>
                             </div>
 
-                            {!title.includes("Rincian") &&
-                                !title.includes("Daftar Penjadwalan") &&
-                                authenticated.role === "admin" && (
-                                    <>
-                                        <Button
-                                            type={
-                                                subPageHref
-                                                    ? "button"
-                                                    : "submit"
-                                            }
-                                            disabled={disabled}
-                                            className="w-max rounded-full hidden sm:flex flex-none"
-                                            onClick={() =>
-                                                subPageHref &&
-                                                router.get(route(subPageHref))
-                                            }
-                                        >
-                                            {title.includes("Daftar") ? (
-                                                <IconPlus className="w-4 h-4" />
-                                            ) : (
-                                                <IconCornerDownLeft className="w-4 h-4" />
-                                            )}
+                            {title.includes("Penjadwalan") ? (
+                                <>
+                                    <Button
+                                        className="w-max rounded-full hidden sm:flex flex-none"
+                                        onClick={() =>
+                                            router.get(
+                                                route("schedule.index"),
+                                                {
+                                                    action: "print",
+                                                }
+                                            )
+                                        }
+                                    >
+                                        <IconPrinter className="w-4 h-4" />
 
-                                            <span className="ml-2 hidden sm:inline">
-                                                {title.includes("Ubah")
-                                                    ? "Ubah"
-                                                    : "Tambah"}
-                                            </span>
-                                        </Button>
+                                        <span className="ml-2 hidden sm:inline">
+                                            Cetak Pesanan Sudah Dipickup
+                                        </span>
+                                    </Button>
 
-                                        <Button
-                                            type={
-                                                subPageHref
-                                                    ? "button"
-                                                    : "submit"
-                                            }
-                                            disabled={disabled}
-                                            className="rounded-full sm:hidden flex-none"
-                                            size="icon"
-                                            onClick={() =>
-                                                subPageHref &&
-                                                router.get(route(subPageHref))
-                                            }
-                                        >
-                                            {title.includes("Daftar") ? (
-                                                <IconPlus className="w-4 h-4" />
-                                            ) : (
-                                                <IconCornerDownLeft className="w-4 h-4" />
-                                            )}
-                                        </Button>
-                                    </>
-                                )}
+                                    <Button
+                                        className="rounded-full sm:hidden flex-none"
+                                        size="icon"
+                                        onClick={() => {}}
+                                    >
+                                        <IconPrinter className="w-4 h-4" />
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    {!title.includes("Rincian") &&
+                                        !title.includes("Daftar Penjadwalan") &&
+                                        authenticated.role === "admin" && (
+                                            <>
+                                                <Button
+                                                    type={
+                                                        subPageHref
+                                                            ? "button"
+                                                            : "submit"
+                                                    }
+                                                    disabled={disabled}
+                                                    className="w-max rounded-full hidden sm:flex flex-none"
+                                                    onClick={() =>
+                                                        subPageHref &&
+                                                        router.get(
+                                                            route(subPageHref)
+                                                        )
+                                                    }
+                                                >
+                                                    {title.includes(
+                                                        "Daftar"
+                                                    ) ? (
+                                                        <IconPlus className="w-4 h-4" />
+                                                    ) : (
+                                                        <IconCornerDownLeft className="w-4 h-4" />
+                                                    )}
+
+                                                    <span className="ml-2 hidden sm:inline">
+                                                        {title.includes("Ubah")
+                                                            ? "Ubah"
+                                                            : "Tambah"}
+                                                    </span>
+                                                </Button>
+
+                                                <Button
+                                                    type={
+                                                        subPageHref
+                                                            ? "button"
+                                                            : "submit"
+                                                    }
+                                                    disabled={disabled}
+                                                    className="rounded-full sm:hidden flex-none"
+                                                    size="icon"
+                                                    onClick={() =>
+                                                        subPageHref &&
+                                                        router.get(
+                                                            route(subPageHref)
+                                                        )
+                                                    }
+                                                >
+                                                    {title.includes(
+                                                        "Daftar"
+                                                    ) ? (
+                                                        <IconPlus className="w-4 h-4" />
+                                                    ) : (
+                                                        <IconCornerDownLeft className="w-4 h-4" />
+                                                    )}
+                                                </Button>
+                                            </>
+                                        )}
+                                </>
+                            )}
                         </CardHeader>
 
                         <CardContent className="p-0 flex grow h-0">

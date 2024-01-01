@@ -19,21 +19,23 @@ class OrderController extends Controller
     {
         return inertia('Orders/Index', [
             'title' => 'Daftar Pesanan',
-            'description' => 'Semua pesanan yang terdaftar.',
-            'orders' => Order::with(['customer', 'courier'])
-                ->whereIn('status', ['siap dikirim', 'belum siap dikirim'])
-                ->orderBy('customers.dest_total_distance', 'asc')->get()
-                ->map(function ($order) {
-                    return [
-                        'order_id' => $order->id,
-                        'customer_id' => $order->customer->id,
-                        'customer_name' => $order->customer->name,
-                        'items_count' => $order->items->count(),
-                        'status' => $order->status,
-                        'created_at' => $order->created_at,
-                        'updated_at' => $order->updated_at,
-                    ];
-                }),
+            'description' => 'Daftar pesanan yang sudah terdaftar.',
+            'orders' => Order::select('id', 'status', 'customer_id', 'created_at', 'updated_at')
+            ->with('customer:id,name,dest_total_distance')
+            ->whereIn('status', ['siap dikirim', 'belum siap dikirim'])
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'order_id' => $order->id,
+                    'customer_id' => $order->customer->id,
+                    'customer_name' => $order->customer->name,
+                    'customer_total_distance' => floatval($order->customer->dest_total_distance),
+                    'items_count' => $order->items->count(),
+                    'status' => $order->status,
+                    'created_at' => $order->created_at,
+                    'updated_at' => $order->updated_at,
+                ];
+            })->sortBy('customer_total_distance')->values()->all(),
         ]);
     }
 

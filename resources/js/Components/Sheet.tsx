@@ -17,7 +17,7 @@ export const Sheet: FC<SheetProps> = ({ trigger, children }: SheetProps) => {
         <ShadcnSheet>
             <SheetTrigger asChild>{trigger}</SheetTrigger>
 
-            <SheetContent side="left" className="p-8 justify-center flex flex-col">
+            <SheetContent side="left" className="p-8 justify-center flex flex-col z-[1000]">
                 {children}
             </SheetContent>
         </ShadcnSheet>

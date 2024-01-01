@@ -34,7 +34,7 @@ export const NavigationBar: FC<NavigationBarProps> = ({
 
     if (authenticated.role === "courier") {
         navigations = navigations.filter(
-            (item) => item.label === "Penjadwalan" || item.label === "Pesanan"
+            (item) => item.label === "Penjadwalan" || item.label === "Pesanan" || item.label === "Pelanggan"
         );
     }
 
