@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,8 +32,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('customers', CustomerController::class);
         Route::resource('orders', OrderController::class);
         Route::resource('schedule', ScheduleController::class);
+        Route::get('/print', [ScheduleController::class, 'print'])->name('print');
     });
-
 });
 
 require __DIR__ . '/auth.php';

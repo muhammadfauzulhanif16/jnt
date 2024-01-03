@@ -2,31 +2,18 @@ import { DataTable } from "@/Components/DataTable";
 import { DropdownMenu } from "@/Components/DropdownMenu";
 import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent,
-    CardFooter,
-} from "@/Components/ui/card";
-import { Input } from "@/Components/ui/input";
 import { Layout } from "@/Layouts/Layout";
 import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import {
-    IconCalendar,
     IconCheck,
     IconDots,
-    IconEdit,
-    IconEye,
     IconMap,
     IconPackage,
-    IconTrash,
+    IconPrinter,
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 
 const Schedule: FC<any> = (props: any) => {
@@ -192,6 +179,16 @@ const Schedule: FC<any> = (props: any) => {
                 </TabsContent>
 
                 <TabsContent value="sudah dipickup" className="grow h-0">
+                    <Button
+                        className="w-full mb-4 rounded-full"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            router.get(route("print"));
+                        }}
+                    >
+                        <IconPrinter className="w-4 h-4 mr-2" />
+                        Cetak Pesanan
+                    </Button>
                     <DataTable
                         data={props.order_has_been_picked_up}
                         columns={columns}

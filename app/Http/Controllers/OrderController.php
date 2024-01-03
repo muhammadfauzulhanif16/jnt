@@ -21,21 +21,21 @@ class OrderController extends Controller
             'title' => 'Daftar Pesanan',
             'description' => 'Daftar pesanan yang sudah terdaftar.',
             'orders' => Order::select('id', 'status', 'customer_id', 'created_at', 'updated_at')
-            ->with('customer:id,name,dest_total_distance')
-            ->whereIn('status', ['siap dikirim', 'belum siap dikirim'])
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'order_id' => $order->id,
-                    'customer_id' => $order->customer->id,
-                    'customer_name' => $order->customer->name,
-                    'customer_total_distance' => floatval($order->customer->dest_total_distance),
-                    'items_count' => $order->items->count(),
-                    'status' => $order->status,
-                    'created_at' => $order->created_at,
-                    'updated_at' => $order->updated_at,
-                ];
-            })->sortBy('customer_total_distance')->values()->all(),
+                ->with('customer:id,name,dest_total_distance')
+                ->whereIn('status', ['siap dikirim', 'belum siap dikirim'])
+                ->get()
+                ->map(function ($order) {
+                    return [
+                        'order_id' => $order->id,
+                        'customer_id' => $order->customer->id,
+                        'customer_name' => $order->customer->name,
+                        'customer_total_distance' => floatval($order->customer->dest_total_distance),
+                        'items_count' => $order->items->count(),
+                        'status' => $order->status,
+                        'created_at' => $order->created_at,
+                        'updated_at' => $order->updated_at,
+                    ];
+                })->sortBy('customer_total_distance')->values()->all(),
         ]);
     }
 
@@ -138,12 +138,21 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
         if ($request->status !== $order->status) {
-            $order->update([
-                'status' => $request->status,
-                'updated_at' => now(),
-            ]);
+            if ($request->status === 'siap dikirim' || $request->status === 'belum siap dikirim') {
+                $order->update([
+                    'status' => $request->status,
+                    'updated_at' => now(),
+                ]);
 
-            return to_route('schedule.index');
+                return to_route('orders.index');
+            } else {
+                $order->update([
+                    'status' => $request->status,
+                    'updated_at' => now(),
+                ]);
+
+                return to_route('schedule.index');
+            }
         } else {
             $order->update([
                 'status' => $request->status,

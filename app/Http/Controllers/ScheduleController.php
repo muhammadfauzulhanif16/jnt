@@ -34,8 +34,9 @@ class ScheduleController extends Controller
                         'status' => $order->status,
                         'scheduling_time' => $order->scheduling_time,
                         'courier_name' => $order->courier->full_name,
+                        'customer_total_distance' => floatval($order->customer->dest_total_distance),
                     ];
-                }),
+                })->sortBy('customer_total_distance')->values()->all(),
             'order_has_been_picked_up' => Order::with(['customer', 'courier'])
                 ->where('status', 'sudah dipickup')
                 ->whereNotNull('scheduling_time')
@@ -49,8 +50,9 @@ class ScheduleController extends Controller
                         'status' => $order->status,
                         'scheduling_time' => $order->scheduling_time,
                         'courier_name' => $order->courier->full_name,
+                        'customer_total_distance' => floatval($order->customer->dest_total_distance),
                     ];
-                }),
+                })->sortBy('customer_total_distance')->values()->all(),
         ]);
     }
 
@@ -131,4 +133,26 @@ class ScheduleController extends Controller
 
     //     return to_route('couriers.index');
     // }
+
+    public function print(Request $request)
+    {
+        return inertia::render('Schedule/Print', [
+            'order_has_been_picked_up' => Order::with(['customer', 'courier'])
+                ->where('status', 'sudah dipickup')
+                ->whereNotNull('scheduling_time')
+                ->get()
+                ->map(function ($order) {
+                    return [
+                        'order_id' => $order->id,
+                        'customer_id' => $order->customer->id,
+                        'customer_name' => $order->customer->name,
+                        'items_count' => $order->items->count(),
+                        'status' => $order->status,
+                        'scheduling_time' => $order->scheduling_time,
+                        'courier_name' => $order->courier->full_name,
+                        'customer_total_distance' => floatval($order->customer->dest_total_distance),
+                    ];
+                })->sortBy('customer_total_distance')->values()->all(),
+        ]);
+    }
 }
