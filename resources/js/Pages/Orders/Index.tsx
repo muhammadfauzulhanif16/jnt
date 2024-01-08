@@ -131,7 +131,7 @@ const Orders: FC<any> = (props: any) => {
                                             "customers.show",
                                             row.original.customer_id
                                         ),
-                                    
+
                                     ),
                                 icon: <IconMap className="w-4 h-4" />,
                                 label: "Lihat Rute",
@@ -146,7 +146,8 @@ const Orders: FC<any> = (props: any) => {
                                         {
                                             customer_id:
                                                 row.original.customer_id,
-                                       
+                                            order_id: row.original.order_id,
+
                                         }
                                     ),
                                 icon: <IconPackage className="w-4 h-4" />,

@@ -9,6 +9,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
@@ -196,5 +197,21 @@ class OrderController extends Controller
         $order->delete();
 
         return to_route('orders.index');
+    }
+
+    public function print(Request $request)
+    {
+        $order_id = $request->query('order_id');
+        return inertia::render('Orders/Print', [
+            'items' => Item::where('order_id', $order_id)->get()->map(
+                function($item) {
+                    return [
+                        'receipt_number' => $item->receipt_number,
+                        'order_status' => $item->order->status,
+                        'customer_name' => $item->order->customer->name,
+                    ];
+                }
+            )
+        ]);
     }
 }

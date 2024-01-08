@@ -10,12 +10,18 @@ import {
     IconDots,
     IconEdit,
     IconEye,
+    IconPrinter,
     IconTrash,
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC, useState } from "react";
 
 const ShowOrder: FC<any> = (props: any) => {
+    function getQueryParam(param: any) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
     const columns: ColumnDef<any>[] = [
         {
             accessorKey: "receipt_number",
@@ -37,14 +43,29 @@ const ShowOrder: FC<any> = (props: any) => {
             description={props.description}
             mainPageHref="orders.index"
         >
-            <DataTable
-                data={props.items}
-                columns={columns}
-                search={{
-                    placeholder: "Cari barang berdasarkan nomor resi...",
-                    column: "receipt_number",
-                }}
-            />
+            <div className="w-full">
+                <Button
+                    className="w-full mb-4 rounded-full"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        router.get(route("print.orders", {
+                            order_id: getQueryParam('order_id')
+                        }));
+                    }}
+                >
+                    <IconPrinter className="w-4 h-4 mr-2" />
+                    Cetak Pesanan
+                </Button>
+
+                <DataTable
+                    data={props.items}
+                    columns={columns}
+                    search={{
+                        placeholder: "Cari barang berdasarkan nomor resi...",
+                        column: "receipt_number",
+                    }}
+                />
+            </div>
         </Layout>
     );
 };

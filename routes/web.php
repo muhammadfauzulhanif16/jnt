@@ -32,7 +32,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('customers', CustomerController::class);
         Route::resource('orders', OrderController::class);
         Route::resource('schedule', ScheduleController::class);
-        Route::get('/print', [ScheduleController::class, 'print'])->name('print');
+        Route::get('/print/schedule', [ScheduleController::class, 'print'])->name('print.schedule');
+        Route::get('/print/orders', [OrderController::class, 'print'])->name('print.orders');
     });
 });
 

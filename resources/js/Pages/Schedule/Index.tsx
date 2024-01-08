@@ -31,6 +31,7 @@ const Schedule: FC<any> = (props: any) => {
                 onClick: () =>
                     router.get(route("orders.show", row.original.order_id), {
                         customer_id: row.original.customer_id,
+                        order_id: row.original.order_id
                     }),
                 icon: <IconPackage className="w-4 h-4" />,
                 label: "Rincian Barang",
@@ -183,7 +184,7 @@ const Schedule: FC<any> = (props: any) => {
                         className="w-full mb-4 rounded-full"
                         onClick={(e) => {
                             e.preventDefault();
-                            router.get(route("print"));
+                            router.get(route("print.schedule"));
                         }}
                     >
                         <IconPrinter className="w-4 h-4 mr-2" />
